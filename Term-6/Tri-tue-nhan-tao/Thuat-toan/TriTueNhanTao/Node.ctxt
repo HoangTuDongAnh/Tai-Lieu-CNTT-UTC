@@ -1,0 +1,5 @@
+#BlueJ class context
+comment0.target=Node
+comment1.params=state\ parent\ depth
+comment1.target=Node(State,\ Node,\ int)
+numComments=2

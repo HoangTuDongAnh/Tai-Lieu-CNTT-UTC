@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=MissionariesCannibalsProblem
+comment1.params=M\ C\ boatCap
+comment1.target=MissionariesCannibalsProblem(int,\ int,\ int)
+comment2.params=
+comment2.target=State\ getInitialState()
+comment3.params=state
+comment3.target=boolean\ isGoal(State)
+comment4.params=state
+comment4.target=java.util.List\ getSuccessors(State)
+comment5.params=u\ mMove\ cMove
+comment5.target=MCState\ move(MCState,\ int,\ int)
+comment6.params=s
+comment6.target=boolean\ isValid(MCState)
+numComments=7

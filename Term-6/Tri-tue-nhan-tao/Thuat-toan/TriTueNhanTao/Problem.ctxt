@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Problem
+comment1.params=
+comment1.target=State\ getInitialState()
+comment2.params=state
+comment2.target=boolean\ isGoal(State)
+comment3.params=state
+comment3.target=java.util.List\ getSuccessors(State)
+numComments=4

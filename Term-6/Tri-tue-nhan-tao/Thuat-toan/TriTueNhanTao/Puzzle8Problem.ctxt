@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=Puzzle8Problem
+comment1.params=initialBoard\ goalBoard
+comment1.target=Puzzle8Problem(int[],\ int[])
+comment2.params=
+comment2.target=State\ getInitialState()
+comment3.params=state
+comment3.target=boolean\ isGoal(State)
+comment4.params=state
+comment4.target=java.util.List\ getSuccessors(State)
+comment5.params=u\ next\ r1\ c1\ r2\ c2
+comment5.target=void\ trySwapAdd(Puzzle8State,\ java.util.List,\ int,\ int,\ int,\ int)
+numComments=6
