@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\TheFirstWindow\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{29F50048-692F-4955-B534-B232A1F12D0D}|TheFirstWindow.vcxproj|E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\TheFirstWindow\\Source.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{29F50048-692F-4955-B534-B232A1F12D0D}|TheFirstWindow.vcxproj|solutionrelative:Source.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Source.cpp",
+              "DocumentMoniker": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\TheFirstWindow\\Source.cpp",
+              "RelativeDocumentMoniker": "Source.cpp",
+              "ToolTip": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\TheFirstWindow\\Source.cpp",
+              "RelativeToolTip": "Source.cpp",
+              "ViewState": "AgIAABYAAAAAAAAAAAAwwDgAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-16T02:55:04.343Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

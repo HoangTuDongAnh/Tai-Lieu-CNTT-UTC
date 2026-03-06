@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\BaiTapCuaSo\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{948AE2F3-E808-43C4-AAA8-3B0A88B0098D}|BaiTapCuaSo.vcxproj|E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\BaiTapCuaSo\\BaiTapCuaSo.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{948AE2F3-E808-43C4-AAA8-3B0A88B0098D}|BaiTapCuaSo.vcxproj|solutionrelative:BaiTapCuaSo.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BaiTapCuaSo.cpp",
+              "DocumentMoniker": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\BaiTapCuaSo\\BaiTapCuaSo.cpp",
+              "RelativeDocumentMoniker": "BaiTapCuaSo.cpp",
+              "ToolTip": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\BaiTapCuaSo\\BaiTapCuaSo.cpp",
+              "RelativeToolTip": "BaiTapCuaSo.cpp",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAAAIAAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-16T03:58:18.705Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

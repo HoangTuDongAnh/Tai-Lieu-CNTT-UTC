@@ -1,0 +1,61 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\BaiTapGDI0602\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F69B2C36-12B0-4408-828F-C1E207987BCD}|BaiTapGDI0602.vcxproj|E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\BaiTapGDI0602\\BaiTapGDI0602.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{F69B2C36-12B0-4408-828F-C1E207987BCD}|BaiTapGDI0602.vcxproj|solutionrelative:BaiTapGDI0602.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F69B2C36-12B0-4408-828F-C1E207987BCD}|BaiTapGDI0602.vcxproj|E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\BaiTapGDI0602\\BaiTapGDI0602.rc||{177559E0-D141-11D0-92DF-00A0C9138C45}|,   b e g i n       $ \u00A1 )$  \u0022     ",
+      "RelativeMoniker": "D:0:0:{F69B2C36-12B0-4408-828F-C1E207987BCD}|BaiTapGDI0602.vcxproj|solutionrelative:BaiTapGDI0602.rc||{177559E0-D141-11D0-92DF-00A0C9138C45}|,   b e g i n       $ \u00A1 )$  \u0022     "
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BaiTapGDI0602.cpp",
+              "DocumentMoniker": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\BaiTapGDI0602\\BaiTapGDI0602.cpp",
+              "RelativeDocumentMoniker": "BaiTapGDI0602.cpp",
+              "ToolTip": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\BaiTapGDI0602\\BaiTapGDI0602.cpp",
+              "RelativeToolTip": "BaiTapGDI0602.cpp",
+              "ViewState": "AgIAAGUAAAAAAAAAAAAUwHIAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-06T03:36:01.332Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "BaiTapGDI0602.rc - IDR_MENU1 - Menu",
+              "DocumentMoniker": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\BaiTapGDI0602\\BaiTapGDI0602.rc",
+              "RelativeDocumentMoniker": "BaiTapGDI0602.rc",
+              "ToolTip": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\WindowsAPI\\BaiTapGDI0602\\BaiTapGDI0602.rc - IDR_MENU1 - Menu",
+              "RelativeToolTip": "BaiTapGDI0602.rc - IDR_MENU1 - Menu",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2026-02-06T03:36:36.341Z",
+              "EditorCaption": " - IDR_MENU1 - Menu"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
