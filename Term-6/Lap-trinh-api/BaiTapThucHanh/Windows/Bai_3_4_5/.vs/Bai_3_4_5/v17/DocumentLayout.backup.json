@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai_3_4_5\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{293B18A3-81F0-4E1C-B991-6DFCDE23F949}|Bai_3_4_5.vcxproj|E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai_3_4_5\\Bai_3_4_5.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{293B18A3-81F0-4E1C-B991-6DFCDE23F949}|Bai_3_4_5.vcxproj|solutionrelative:Bai_3_4_5.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{293B18A3-81F0-4E1C-B991-6DFCDE23F949}|Bai_3_4_5.vcxproj|E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai_3_4_5\\Bai_3_4_5.rc||{177559E0-D141-11D0-92DF-00A0C9138C45}|,   b e g i n       $ \u00A7 )$  \u0022     ",
+      "RelativeMoniker": "D:0:0:{293B18A3-81F0-4E1C-B991-6DFCDE23F949}|Bai_3_4_5.vcxproj|solutionrelative:Bai_3_4_5.rc||{177559E0-D141-11D0-92DF-00A0C9138C45}|,   b e g i n       $ \u00A7 )$  \u0022     "
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{293B18A3-81F0-4E1C-B991-6DFCDE23F949}|Bai_3_4_5.vcxproj|E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai_3_4_5\\Bai_3_4_5.rc||{177559E0-D141-11D0-92DF-00A0C9138C45}|,   b e g i n       $ \u00A6 )$  \u0022     ",
+      "RelativeMoniker": "D:0:0:{293B18A3-81F0-4E1C-B991-6DFCDE23F949}|Bai_3_4_5.vcxproj|solutionrelative:Bai_3_4_5.rc||{177559E0-D141-11D0-92DF-00A0C9138C45}|,   b e g i n       $ \u00A6 )$  \u0022     "
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Bai_3_4_5.rc - IDR_MENU_PU - Menu",
+              "DocumentMoniker": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai_3_4_5\\Bai_3_4_5.rc",
+              "RelativeDocumentMoniker": "Bai_3_4_5.rc",
+              "ToolTip": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai_3_4_5\\Bai_3_4_5.rc - IDR_MENU_PU - Menu",
+              "RelativeToolTip": "Bai_3_4_5.rc - IDR_MENU_PU - Menu",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2026-01-29T13:36:23.044Z",
+              "EditorCaption": " - IDR_MENU_PU - Menu"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Bai_3_4_5.rc - IDR_MENU_NN - Menu",
+              "DocumentMoniker": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai_3_4_5\\Bai_3_4_5.rc",
+              "RelativeDocumentMoniker": "Bai_3_4_5.rc",
+              "ToolTip": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai_3_4_5\\Bai_3_4_5.rc - IDR_MENU_NN - Menu",
+              "RelativeToolTip": "Bai_3_4_5.rc - IDR_MENU_NN - Menu",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2026-01-29T13:15:08.888Z",
+              "EditorCaption": " - IDR_MENU_NN - Menu"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Bai_3_4_5.cpp",
+              "DocumentMoniker": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai_3_4_5\\Bai_3_4_5.cpp",
+              "RelativeDocumentMoniker": "Bai_3_4_5.cpp",
+              "ToolTip": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai_3_4_5\\Bai_3_4_5.cpp",
+              "RelativeToolTip": "Bai_3_4_5.cpp",
+              "ViewState": "AgIAAOgAAAAAAAAAAAAuwAIBAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-29T12:39:39.551Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

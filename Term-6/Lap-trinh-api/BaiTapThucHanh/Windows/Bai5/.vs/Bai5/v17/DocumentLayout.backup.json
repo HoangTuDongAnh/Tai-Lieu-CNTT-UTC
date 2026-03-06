@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai5\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{AFC1B3B6-5091-43E6-AE61-3DA4FE983781}|Bai5.vcxproj|E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai5\\Bai5.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{AFC1B3B6-5091-43E6-AE61-3DA4FE983781}|Bai5.vcxproj|solutionrelative:Bai5.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AFC1B3B6-5091-43E6-AE61-3DA4FE983781}|Bai5.vcxproj|E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai5\\Bai5.rc||{177559E0-D141-11D0-92DF-00A0C9138C45}|,   b e g i n       $ \u00A1 )$  \u0022     ",
+      "RelativeMoniker": "D:0:0:{AFC1B3B6-5091-43E6-AE61-3DA4FE983781}|Bai5.vcxproj|solutionrelative:Bai5.rc||{177559E0-D141-11D0-92DF-00A0C9138C45}|,   b e g i n       $ \u00A1 )$  \u0022     "
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AFC1B3B6-5091-43E6-AE61-3DA4FE983781}|Bai5.vcxproj|E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai5\\Bai5.rc||{177559E0-D141-11D0-92DF-00A0C9138C45}|,   b e g i n       $ \u00A2 )$  \u0022     ",
+      "RelativeMoniker": "D:0:0:{AFC1B3B6-5091-43E6-AE61-3DA4FE983781}|Bai5.vcxproj|solutionrelative:Bai5.rc||{177559E0-D141-11D0-92DF-00A0C9138C45}|,   b e g i n       $ \u00A2 )$  \u0022     "
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Bai5.rc - IDR_MENU2 - Menu",
+              "DocumentMoniker": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai5\\Bai5.rc",
+              "RelativeDocumentMoniker": "Bai5.rc",
+              "ToolTip": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai5\\Bai5.rc - IDR_MENU2 - Menu",
+              "RelativeToolTip": "Bai5.rc - IDR_MENU2 - Menu",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2026-01-29T13:52:22.502Z",
+              "EditorCaption": " - IDR_MENU2 - Menu"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Bai5.rc - IDR_MENU1 - Menu",
+              "DocumentMoniker": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai5\\Bai5.rc",
+              "RelativeDocumentMoniker": "Bai5.rc",
+              "ToolTip": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai5\\Bai5.rc - IDR_MENU1 - Menu",
+              "RelativeToolTip": "Bai5.rc - IDR_MENU1 - Menu",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2026-01-29T13:51:32.333Z",
+              "EditorCaption": " - IDR_MENU1 - Menu"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Bai5.cpp",
+              "DocumentMoniker": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai5\\Bai5.cpp",
+              "RelativeDocumentMoniker": "Bai5.cpp",
+              "ToolTip": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai5\\Bai5.cpp",
+              "RelativeToolTip": "Bai5.cpp",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAAAIoAAABhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-29T13:47:28.028Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
