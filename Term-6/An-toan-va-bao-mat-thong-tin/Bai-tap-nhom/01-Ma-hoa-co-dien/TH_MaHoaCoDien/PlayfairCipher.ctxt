@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=PlayfairCipher
+comment1.params=key
+comment1.target=char[][]\ genMatKey(java.lang.String)
+comment2.params=text
+comment2.target=java.lang.String\ prepText(java.lang.String)
+comment3.params=matKey\ ch
+comment3.target=int[]\ findPos(char[][],\ char)
+comment4.params=plainText\ key
+comment4.target=java.lang.String\ encrypt(java.lang.String,\ java.lang.String)
+comment5.params=matrix
+comment5.target=void\ printMatrix(char[][])
+comment6.params=args
+comment6.target=void\ main(java.lang.String[])
+numComments=7
