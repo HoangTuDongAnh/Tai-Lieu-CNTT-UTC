@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\00_DaiHoc\\API\\thuchanh1\\thuchanh1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3187CB91-DA37-44A8-95C8-A372993C6F62}|thuchanh1.vcxproj|D:\\00_DaiHoc\\API\\thuchanh1\\thuchanh1\\thuchanh1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3187CB91-DA37-44A8-95C8-A372993C6F62}|thuchanh1.vcxproj|solutionrelative:thuchanh1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "thuchanh1.cpp",
+              "DocumentMoniker": "D:\\00_DaiHoc\\API\\thuchanh1\\thuchanh1\\thuchanh1.cpp",
+              "RelativeDocumentMoniker": "thuchanh1.cpp",
+              "ToolTip": "D:\\00_DaiHoc\\API\\thuchanh1\\thuchanh1\\thuchanh1.cpp",
+              "RelativeToolTip": "thuchanh1.cpp",
+              "ViewState": "AgIAALsAAAAAAAAAAAAkwMkAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-03-12T02:32:24.066Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
