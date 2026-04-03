@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=Bai9LogaritRoiRac
+comment1.params=a\ n
+comment1.target=long\ mod(long,\ long)
+comment2.params=a\ b
+comment2.target=long\ gcd(long,\ long)
+comment3.params=n
+comment3.target=long\ phi(long)
+comment4.params=a\ m\ n
+comment4.target=long\ modPow(long,\ long,\ long)
+comment5.params=a\ n
+comment5.target=boolean\ isPrimitiveRoot(long,\ long)
+comment6.params=a\ b\ n
+comment6.target=java.lang.Long\ discreteLog(long,\ long,\ long)
+comment7.params=args
+comment7.target=void\ main(java.lang.String[])
+numComments=8

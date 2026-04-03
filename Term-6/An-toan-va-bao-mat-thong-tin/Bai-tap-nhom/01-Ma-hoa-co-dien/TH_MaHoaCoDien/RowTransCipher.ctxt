@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=RowTransCipher
+comment1.params=text
+comment1.target=java.lang.String\ normalizeText(java.lang.String)
+comment2.params=key
+comment2.target=boolean\ validateKey(java.lang.String)
+comment3.params=key
+comment3.target=int[]\ buildColumnReadOrder(java.lang.String)
+comment4.params=text\ columnCount
+comment4.target=java.lang.String\ padWithX(java.lang.String,\ int)
+comment5.params=text\ columnCount
+comment5.target=char[][]\ buildGrid(java.lang.String,\ int)
+comment6.params=message\ key
+comment6.target=java.lang.String\ encrypt(java.lang.String,\ java.lang.String)
+comment7.params=cipherText\ key
+comment7.target=java.lang.String\ decrypt(java.lang.String,\ java.lang.String)
+comment8.params=message\ key
+comment8.target=void\ printEncryptionGrid(java.lang.String,\ java.lang.String)
+comment9.params=args
+comment9.target=void\ main(java.lang.String[])
+numComments=10

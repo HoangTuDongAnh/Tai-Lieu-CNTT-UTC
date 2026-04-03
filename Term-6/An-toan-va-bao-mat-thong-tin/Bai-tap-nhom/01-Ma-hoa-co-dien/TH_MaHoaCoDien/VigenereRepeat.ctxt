@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=VigenereRepeat
+comment1.params=text
+comment1.target=java.lang.String\ normalizeText(java.lang.String)
+comment2.params=ch
+comment2.target=int\ charToValue(char)
+comment3.params=value
+comment3.target=char\ valueToChar(int)
+comment4.params=key\ length
+comment4.target=java.lang.String\ buildRepeatedKey(java.lang.String,\ int)
+comment5.params=message\ key
+comment5.target=java.lang.String\ encrypt(java.lang.String,\ java.lang.String)
+comment6.params=cipherText\ key
+comment6.target=java.lang.String\ decrypt(java.lang.String,\ java.lang.String)
+comment7.params=args
+comment7.target=void\ main(java.lang.String[])
+numComments=8

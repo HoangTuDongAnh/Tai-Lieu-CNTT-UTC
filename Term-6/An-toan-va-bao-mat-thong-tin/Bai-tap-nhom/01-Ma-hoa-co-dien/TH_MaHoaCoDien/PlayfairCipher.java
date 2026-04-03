@@ -1,133 +1,155 @@
-public class PlayfairCipher
-{
-    public static char[][] genMatKey(String key) {
-        key = key.replace('J', 'I');
-        StringBuilder sb = new StringBuilder();
+public class PlayfairCipher {
+
+    static char[][] keyMatrix = new char[5][5];
+    static int[] rowPositions = new int[26];
+    static int[] colPositions = new int[26];
+
+    static String normalizeText(String text) {
+        StringBuilder output = new StringBuilder();
+
+        for (int i = 0; i < text.length(); i++) {
+            char ch = Character.toUpperCase(text.charAt(i));
+
+            if (ch >= 'A' && ch <= 'Z') {
+                if (ch == 'J') ch = 'I';
+                output.append(ch);
+            }
+        }
+
+        return output.toString();
+    }
+
+    static void buildKeyMatrix(String key) {
         boolean[] used = new boolean[26];
-        
-        // J gop voi I
         used['J' - 'A'] = true;
-        
-        // Them cac ky tu cua key truoc
-        for (char c : key.toCharArray()) {
-            if (!used[c - 'A']) {
-                used[c - 'A'] = true;
-                sb.append(c);
-            }
-        }
-        
-        // Them cac ky tu con lai
-        for (char c = 'A'; c <= 'Z'; c++) {
-            if (!used[c - 'A']) {
-                used[c - 'A'] = true;
-                sb.append(c);
-            }
-        }
-        
-        char[][] matKey = new char[5][5];
+
+        String source = normalizeText(key) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
         int index = 0;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                matKey[i][j] = sb.charAt(index++);
+        for (int i = 0; i < source.length(); i++) {
+            char ch = source.charAt(i);
+            int alphabetIndex = ch - 'A';
+
+            if (!used[alphabetIndex]) {
+                used[alphabetIndex] = true;
+                keyMatrix[index / 5][index % 5] = ch;
+                rowPositions[alphabetIndex] = index / 5;
+                colPositions[alphabetIndex] = index % 5;
+                index++;
             }
         }
-        
-        return matKey;
+
+        rowPositions['J' - 'A'] = rowPositions['I' - 'A'];
+        colPositions['J' - 'A'] = colPositions['I' - 'A'];
     }
-    
-    public static String prepText(String text) {
-        text = text.replace('J', 'I');
-        StringBuilder res = new StringBuilder();
+
+    static String splitIntoDigraphs(String message) {
+        message = normalizeText(message);
+        StringBuilder output = new StringBuilder();
+
         int i = 0;
-        
-        while (i < text.length()) { 
-            char first = text.charAt(i);
+        while (i < message.length()) {
+            char first = message.charAt(i);
+            char second;
 
-            if (i == text.length() - 1) {
-                res.append(first).append('X');
-                i++;
+            if (i + 1 >= message.length()) {
+                second = 'X';
+                i += 1;
+            } else if (message.charAt(i) == message.charAt(i + 1)) {
+                second = 'X';
+                i += 1;
             } else {
-                char second = text.charAt(i + 1);
+                second = message.charAt(i + 1);
+                i += 2;
+            }
 
-                if (first == second) {
-                    res.append(first).append('X');
-                    i++; 
-                } else {
-                    res.append(first).append(second);
-                    i += 2;
-                }
-            }
+            output.append(first).append(second);
         }
-        
-        return res.toString();
+
+        return output.toString();
     }
-    
-    public static int[] findPos(char[][] matKey, char ch) {
+
+    static String encryptPair(char first, char second) {
+        int r1 = rowPositions[first - 'A'];
+        int c1 = colPositions[first - 'A'];
+        int r2 = rowPositions[second - 'A'];
+        int c2 = colPositions[second - 'A'];
+
+        if (r1 == r2) {
+            return "" + keyMatrix[r1][(c1 + 1) % 5] + keyMatrix[r2][(c2 + 1) % 5];
+        }
+
+        if (c1 == c2) {
+            return "" + keyMatrix[(r1 + 1) % 5][c1] + keyMatrix[(r2 + 1) % 5][c2];
+        }
+
+        return "" + keyMatrix[r1][c2] + keyMatrix[r2][c1];
+    }
+
+    static String decryptPair(char first, char second) {
+        int r1 = rowPositions[first - 'A'];
+        int c1 = colPositions[first - 'A'];
+        int r2 = rowPositions[second - 'A'];
+        int c2 = colPositions[second - 'A'];
+
+        if (r1 == r2) {
+            return "" + keyMatrix[r1][(c1 + 4) % 5] + keyMatrix[r2][(c2 + 4) % 5];
+        }
+
+        if (c1 == c2) {
+            return "" + keyMatrix[(r1 + 4) % 5][c1] + keyMatrix[(r2 + 4) % 5][c2];
+        }
+
+        return "" + keyMatrix[r1][c2] + keyMatrix[r2][c1];
+    }
+
+    static String encrypt(String message) {
+        String preparedText = splitIntoDigraphs(message);
+        StringBuilder output = new StringBuilder();
+
+        for (int i = 0; i < preparedText.length(); i += 2) {
+            output.append(encryptPair(preparedText.charAt(i), preparedText.charAt(i + 1)));
+        }
+
+        return output.toString();
+    }
+
+    static String decrypt(String cipherText) {
+        cipherText = normalizeText(cipherText);
+        StringBuilder output = new StringBuilder();
+
+        for (int i = 0; i < cipherText.length(); i += 2) {
+            output.append(decryptPair(cipherText.charAt(i), cipherText.charAt(i + 1)));
+        }
+
+        return output.toString();
+    }
+
+    static void printKeyMatrix() {
+        System.out.println("Key matrix:");
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (matKey[i][j] == ch) {
-                    return new int[]{i, j};
-                }
-            }
-        }
-        
-        return null;
-    }
-    
-    public static String encrypt(String plainText, String key) {
-        char[][] matKey = genMatKey(key);
-        String prep = prepText(plainText);
-        StringBuilder res = new StringBuilder();
-        
-        for (int i = 0; i < prep.length(); i += 2) {
-            char a = prep.charAt(i);
-            char b = prep.charAt(i+1);
-            
-            int[] posA = findPos(matKey, a);
-            int[] posB = findPos(matKey, b);
-            
-            int rowA = posA[0], colA = posA[1];
-            int rowB = posB[0], colB = posB[1];
-            
-            if (rowA == rowB) {
-                res.append(matKey[rowA][(colA + 1) % 5]);
-                res.append(matKey[rowB][(colB + 1) % 5]);
-            }
-            
-            else if (colA == colB) {
-                res.append(matKey[(rowA + 1) % 5][colA]);
-                res.append(matKey[(rowB + 1) % 5][colB]);
-            }
-            
-            else {
-                res.append(matKey[rowA][colB]);
-                res.append(matKey[rowB][colA]);
-            }
-        }
-        
-        return res.toString();
-    }
-    
-    public static void printMatrix(char[][] matrix) {
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                System.out.print(matrix[i][j] + " ");
+                System.out.print(keyMatrix[i][j] + " ");
             }
             System.out.println();
         }
     }
-    
+
     public static void main(String[] args) {
+        String plainText = "STILLWATERSR";
         String key = "SAVEFORA";
-        String plaintext = "STILLWATERSR";
 
-        char[][] matrix = genMatKey(key);
+        buildKeyMatrix(key);
 
-        System.out.println("Ma tran khoa:");
-        printMatrix(matrix);
+        String preparedText = splitIntoDigraphs(plainText);
+        String cipherText = encrypt(plainText);
+        String decryptedText = decrypt(cipherText);
 
-        System.out.println("Plaintext goc     : " + plaintext);
-        System.out.println("Plaintext xu ly   : " + prepText(plaintext));
-        System.out.println("Ciphertext        : " + encrypt(plaintext, key));
+        System.out.println("Plain text   : " + normalizeText(plainText));
+        System.out.println("Key          : " + normalizeText(key));
+        printKeyMatrix();
+        System.out.println("Prepared text: " + preparedText);
+        System.out.println("Cipher text  : " + cipherText);
+        System.out.println("Decrypted    : " + decryptedText);
     }
 }
