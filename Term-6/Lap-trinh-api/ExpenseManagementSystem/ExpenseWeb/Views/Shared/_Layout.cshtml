@@ -1,0 +1,119 @@
+﻿@{
+    var lang = (Context.Request.Query["lang"].FirstOrDefault() ?? "vi").ToLower();
+    if (lang != "en") lang = "vi";
+
+    ViewBag.Lang = lang;
+    var title = ViewBag.Title ?? "Mimo";
+    var role = Context.Session.GetString("UserRole")?.Trim().ToLower() ?? "user";
+}
+<!doctype html>
+<html lang="@lang">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>@title</title>
+    <meta name="description" content="Mimo - Hệ thống quản lý chi tiêu cá nhân" />
+    <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/sneat/vendor/fonts/iconify-icons.css" />
+    <link rel="stylesheet" href="~/sneat/vendor/css/core.css" />
+    <link rel="stylesheet" href="~/sneat/css/demo.css" />
+    <link rel="stylesheet" href="~/sneat/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="~/sneat/vendor/libs/apex-charts/apex-charts.css" />
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/popup.base.css" asp-append-version="true" />
+
+    @RenderSection("Styles", required: false)
+
+    <script src="~/sneat/vendor/js/helpers.js"></script>
+    <script src="~/sneat/js/config.js"></script>
+</head>
+<body class="mimo-layout-body">
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-page mimo-layout-page">
+            @if (role == "admin")
+            {
+                <partial name="_NavbarAdmin" />
+            }
+            else
+            {
+                <partial name="_NavbarUser" />
+            }
+
+            <div class="content-wrapper">
+                <main class="container-xxl flex-grow-1 container-p-y mimo-main-shell">
+                    @RenderBody()
+                </main>
+
+                <div class="content-backdrop fade"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="appToastStack" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:1095;"></div>
+
+    <div class="modal fade" id="mimoGlobalLightbox" tabindex="-1" aria-hidden="true" data-bs-backdrop="false" style="background-color: rgba(0,0,0,0.85); z-index: 9999;">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content bg-transparent border-0 shadow-none position-relative">
+                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 mt-3 me-3" data-bs-dismiss="modal" aria-label="Close" style="z-index: 10;"></button>
+                <div class="modal-body text-center p-0 d-flex align-items-center justify-content-center" id="mimoLightboxContent" style="min-height: 50vh;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/sneat/vendor/libs/jquery/jquery.js"></script>
+    <script src="~/sneat/vendor/libs/popper/popper.js"></script>
+    <script src="~/sneat/vendor/js/bootstrap.js"></script>
+    <script src="~/sneat/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="~/sneat/vendor/js/menu.js"></script>
+    <script src="~/sneat/vendor/libs/apex-charts/apexcharts.js"></script>
+    <script src="~/sneat/js/main.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/app.js" asp-append-version="true"></script>
+    <script src="~/js/app.ui.js" asp-append-version="true"></script>
+    <script src="~/js/popup.base.js" asp-append-version="true"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            $(document).on('click', '.mimo-zoomable, .view-media-btn', function (e) {
+                e.preventDefault();
+
+                const src = $(this).attr('data-src') || $(this).attr('src');
+                const type = $(this).attr('data-type') || 'image';
+                const isCircle = $(this).hasClass('zoom-circle'); 
+
+                const $content = $('#mimoLightboxContent');
+                $content.empty(); 
+
+                if (type === 'image') {
+                    const imgClass = isCircle ? 'rounded-circle shadow-lg' : 'rounded shadow-lg';
+                    const imgStyle = isCircle
+                        ? 'width: 350px; aspect-ratio: 1/1; border: 4px solid #fff;'
+                        : 'max-height: 85vh; max-width: 100%; border: 2px solid rgba(255,255,255,0.1);';
+
+                    $content.html(`<img src="${src}" class="${imgClass}" style="object-fit: cover; ${imgStyle}" />`);
+                } else if (type === 'video') {
+                    $content.html(`
+                        <video controls autoplay class="rounded shadow-lg w-100" style="max-height: 85vh; background: #000;">
+                            <source src="${src}" type="video/mp4">
+                            Trình duyệt của bạn không hỗ trợ thẻ video.
+                        </video>
+                    `);
+                }
+
+                $('#mimoGlobalLightbox').modal('show');
+            });
+
+            $('#mimoGlobalLightbox').on('hidden.bs.modal', function () {
+                $('#mimoLightboxContent').empty();
+            });
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

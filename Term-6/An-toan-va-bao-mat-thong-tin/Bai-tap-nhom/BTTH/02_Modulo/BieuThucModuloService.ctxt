@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=BieuThucModuloService
+comment1.params=
+comment1.target=BieuThucModuloService()
+comment2.params=a\ b\ x\ y\ n
+comment2.target=long\ tinhA1(long,\ long,\ long,\ long,\ long)
+comment3.params=a\ b\ x\ y\ n
+comment3.target=long\ tinhA2(long,\ long,\ long,\ long,\ long)
+comment4.params=a\ b\ x\ y\ n
+comment4.target=long\ tinhA3(long,\ long,\ long,\ long,\ long)
+comment5.params=b\ y\ n
+comment5.target=java.lang.Long\ tinhA4(long,\ long,\ long)
+comment6.params=a\ b\ x\ y\ n
+comment6.target=java.lang.Long\ tinhA5(long,\ long,\ long,\ long,\ long)
+numComments=7

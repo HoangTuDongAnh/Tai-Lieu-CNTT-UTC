@@ -1,0 +1,79 @@
+﻿@model BoMon.Models.SearchViewModel
+
+@{
+    ViewData["Title"] = "Tra cứu giảng viên";
+    bool dangLoc = !string.IsNullOrWhiteSpace(Model.GioiTinh) || !string.IsNullOrWhiteSpace(Model.TenBoMon);
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">TRA CỨU GIẢNG VIÊN</h2>
+
+    <form method="get" asp-controller="TraCuu" asp-action="Index">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label class="form-label">Giới tính</label>
+                <input type="text" name="gioiTinh" value="@Model.GioiTinh" class="form-control" placeholder="Nhập Nam hoặc Nữ" />
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Tên bộ môn gần đúng</label>
+                <input type="text" name="tenBoMon" value="@Model.TenBoMon" class="form-control" placeholder="Ví dụ: Công nghệ, Toán..." />
+            </div>
+
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary me-2">Tìm kiếm</button>
+                <a asp-controller="TraCuu" asp-action="Index" class="btn btn-secondary">Làm mới</a>
+            </div>
+        </div>
+    </form>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+    else
+    {
+        <h4 class="mb-3">
+            @(dangLoc ? "Kết quả tìm kiếm giảng viên" : "Danh sách toàn bộ giảng viên")
+        </h4>
+
+        @if (Model.KetQua != null && Model.KetQua.Count > 0)
+        {
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Mã GV</th>
+                        <th>Tên GV</th>
+                        <th>Giới tính</th>
+                        <th>Địa chỉ</th>
+                        <th>Số ĐT</th>
+                        <th>Mã BM</th>
+                        <th>Tên bộ môn</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.KetQua)
+                    {
+                        <tr>
+                            <td>@item.MaGV</td>
+                            <td>@item.TenGV</td>
+                            <td>@item.GioiTinh</td>
+                            <td>@item.DiaChi</td>
+                            <td>@item.SoDT</td>
+                            <td>@item.MaBM</td>
+                            <td>@item.TenBM</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                Không có dữ liệu giảng viên.
+            </div>
+        }
+    }
+</div>

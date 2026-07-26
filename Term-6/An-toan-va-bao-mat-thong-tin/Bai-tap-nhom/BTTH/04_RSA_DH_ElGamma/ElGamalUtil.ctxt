@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=ElGamalUtil
+comment1.params=a\ n
+comment1.target=long\ mod(long,\ long)
+comment2.params=a\ b
+comment2.target=long\ gcd(long,\ long)
+comment3.params=base\ exponent\ mod
+comment3.target=long\ powerMod(long,\ long,\ long)
+comment4.params=a\ m
+comment4.target=long\ modInverse(long,\ long)
+numComments=5

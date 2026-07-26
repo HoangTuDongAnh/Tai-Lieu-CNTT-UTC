@@ -1,0 +1,1002 @@
+﻿@model ExpenseWeb.Models.ViewModels.Admin.AdminDashboardViewModel
+@using System.Text.Json
+@using System.Text.Encodings.Web
+@inject IConfiguration Configuration
+@{
+    var lang = (Context.Request.Query["lang"].FirstOrDefault() ?? "vi").ToLower();
+    string T(string vi, string en) => lang == "en" ? en : vi;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = T("Bảng điều khiển quản trị", "Admin Dashboard");
+    var apiBaseUrl = (Configuration["ApiSettings:BaseUrl"] ?? string.Empty).TrimEnd('/');
+    var serializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+    {
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    };
+    var initialDashboardJson = JsonSerializer.Serialize(Model, serializerOptions);
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/page.admin-dashboard.css" asp-append-version="true" />
+}
+
+<div class="page-shell admin-dashboard-page">
+    <section class="dashboard-hero mb-0">
+        <div class="dashboard-hero-copy admin-hero">
+            <div>
+                <span class="dashboard-hero-eyebrow">@T("Quản trị hệ thống", "System Administration")</span>
+                <h1 class="dashboard-hero-title">
+                    @T("Dashboard Quản trị viên", "Administrator Dashboard")
+                </h1>
+                <p class="dashboard-hero-text">
+                    @T("Theo dõi tài khoản, đăng ký mới và các yêu cầu đang chờ xử lý trong thời gian thực.",
+                    "Monitor accounts, new signups, and pending support requests in real time.")
+                </p>
+            </div>
+            <div class="admin-hero-actions">
+                <button type="button" class="btn btn-primary" id="refreshDashboardBtn">
+                    <i class="bx bx-refresh me-1"></i>@T("Làm mới", "Refresh")
+                </button>
+                <a class="btn btn-outline-primary" asp-controller="Admin" asp-action="ErrorReports" asp-route-lang="@lang">
+                    <i class="bx bx-message-error me-1"></i>@T("Mở trang hỗ trợ", "Open support desk")
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div id="dashboardAlert" class="alert alert-danger@(TempData["AdminDashboardError"] != null ? string.Empty : " d-none") mb-0" role="alert">
+        @(TempData["AdminDashboardError"]?.ToString())
+    </div>
+
+    <section class="row g-4">
+        <div class="col-md-6 col-xl-3">
+            <article class="admin-kpi-card h-100">
+                <div class="admin-kpi-body">
+                    <div class="admin-kpi-top">
+                        <div>
+                            <p class="admin-kpi-title">@T("Tổng tài khoản", "Total accounts")</p>
+                            <h2 class="admin-kpi-value" id="metricTotalUsers">@Model.TotalUsers</h2>
+                        </div>
+                        <span class="admin-kpi-icon is-total"><i class="bx bx-group"></i></span>
+                    </div>
+                    <p class="admin-kpi-meta" id="metricTotalUsersMeta">@T("Dữ liệu người dùng toàn hệ thống", "All registered users in the system")</p>
+                </div>
+            </article>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <article class="admin-kpi-card h-100">
+                <div class="admin-kpi-body">
+                    <div class="admin-kpi-top">
+                        <div>
+                            <p class="admin-kpi-title">@T("Đang hoạt động", "Active accounts")</p>
+                            <h2 class="admin-kpi-value" id="metricActiveUsers">@Model.ActiveUsers</h2>
+                        </div>
+                        <span class="admin-kpi-icon is-active"><i class="bx bx-check-shield"></i></span>
+                    </div>
+                    <p class="admin-kpi-meta" id="metricActiveUsersMeta">@T("Tài khoản có trạng thái active", "Accounts marked as active")</p>
+                </div>
+            </article>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <article class="admin-kpi-card h-100">
+                <div class="admin-kpi-body">
+                    <div class="admin-kpi-top">
+                        <div>
+                            <p class="admin-kpi-title">@T("Không hoạt động", "Inactive accounts")</p>
+                            <h2 class="admin-kpi-value" id="metricInactiveUsers">@Model.InactiveUsers</h2>
+                        </div>
+                        <span class="admin-kpi-icon is-inactive"><i class="bx bx-user-x"></i></span>
+                    </div>
+                    <p class="admin-kpi-meta" id="metricInactiveUsersMeta">@T("Tài khoản đang bị tắt hoặc không active", "Accounts not currently active")</p>
+                </div>
+            </article>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <article class="admin-kpi-card h-100">
+                <div class="admin-kpi-body">
+                    <div class="admin-kpi-top">
+                        <div>
+                            <p class="admin-kpi-title">@T("Yêu cầu chờ xử lý", "Pending requests")</p>
+                            <h2 class="admin-kpi-value" id="metricPendingRequests">@Model.PendingRequests</h2>
+                        </div>
+                        <span class="admin-kpi-icon is-support"><i class="bx bx-help-circle"></i></span>
+                    </div>
+                    <p class="admin-kpi-meta" id="metricPendingRequestsMeta">@T("Các ticket đang ở trạng thái pending", "Tickets currently waiting for admin action")</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="admin-highlight-grid">
+        <article class="admin-highlight-item">
+            <span class="admin-highlight-icon"><i class="bx bx-user-plus"></i></span>
+            <div>
+                <strong class="admin-highlight-value" id="highlightNewToday">@Model.NewUsersToday</strong>
+                <span class="admin-highlight-label">@T("Tài khoản tạo hôm nay", "Accounts created today")</span>
+            </div>
+        </article>
+        <article class="admin-highlight-item">
+            <span class="admin-highlight-icon"><i class="bx bx-line-chart"></i></span>
+            <div>
+                <strong class="admin-highlight-value" id="highlightNewWeek">@Model.NewUsersWeekTotal</strong>
+                <span class="admin-highlight-label">@T("Đăng ký mới trong 7 ngày", "New registrations in the last 7 days")</span>
+            </div>
+        </article>
+        <article class="admin-highlight-item">
+            <span class="admin-highlight-icon"><i class="bx bx-bell"></i></span>
+            <div>
+                <strong class="admin-highlight-value" id="highlightHighPriority">@Model.HighPriorityOpenRequests</strong>
+                <span class="admin-highlight-label">@T("Yêu cầu ưu tiên cao đang mở", "Open high-priority requests")</span>
+            </div>
+        </article>
+    </section>
+
+    <section class="row g-4">
+        <div class="col-lg-8">
+            <article class="admin-panel h-100">
+                <div class="admin-panel-header">
+                    <div>
+                        <h2 class="admin-panel-title">@T("Xu hướng đăng ký người dùng", "User registration trend")</h2>
+                        <p class="admin-panel-subtitle">@T("Số tài khoản mới theo từng ngày trong 7 ngày gần nhất.", "New accounts created each day across the last 7 days.")</p>
+                    </div>
+                </div>
+                <div class="admin-chart admin-chart-shell"><canvas id="userTrendChartCanvas"></canvas></div>
+            </article>
+        </div>
+        <div class="col-lg-4">
+            <article class="admin-panel h-100">
+                <div class="admin-panel-header">
+                    <div>
+                        <h2 class="admin-panel-title">@T("Cơ cấu trạng thái tài khoản", "Account status mix")</h2>
+                        <p class="admin-panel-subtitle">@T("So sánh active và inactive để nhìn nhanh sức khỏe hệ thống.", "Compare active vs inactive accounts for a quick health check.")</p>
+                    </div>
+                </div>
+                <div class="admin-chart admin-chart-shell"><canvas id="userStatusChartCanvas"></canvas></div>
+            </article>
+        </div>
+    </section>
+
+    <section class="row g-4">
+        <div class="col-xl-6">
+            <article class="admin-panel h-100">
+                <div class="admin-panel-header">
+                    <div>
+                        <h2 class="admin-panel-title">@T("Người dùng mới gần đây", "Recent signups")</h2>
+                        <p class="admin-panel-subtitle">@T("Danh sách rút gọn để admin kiểm tra nhanh các tài khoản vừa tạo.", "A compact list of the most recently created accounts.")</p>
+                    </div>
+                </div>
+                <div id="recentUsersList" class="admin-list">
+                    <div class="admin-empty">@T("Đang tải dữ liệu...", "Loading data...")</div>
+                </div>
+            </article>
+        </div>
+        <div class="col-xl-6">
+            <article class="admin-panel h-100">
+                <div class="admin-panel-header">
+                    <div>
+                        <h2 class="admin-panel-title">@T("Hàng chờ hỗ trợ", "Support queue")</h2>
+                        <p class="admin-panel-subtitle">@T("Các yêu cầu pending/viewed mới nhất để xử lý nhanh từ dashboard.", "Newest pending/viewed requests surfaced directly on the dashboard.")</p>
+                    </div>
+                    <a class="btn btn-sm btn-outline-primary" asp-controller="Admin" asp-action="ErrorReports" asp-route-lang="@lang">@T("Xem tất cả", "View all")</a>
+                </div>
+                <div id="supportQueueList" class="admin-queue">
+                    <div class="admin-empty">@T("Đang tải dữ liệu...", "Loading data...")</div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="admin-table-panel">
+        <div class="admin-panel-header mb-3">
+            <div>
+                <h2 class="admin-panel-title">@T("Danh sách tài khoản gần đây", "Recent account list")</h2>
+                <p class="admin-panel-subtitle" id="tableSummaryText">@T("Dữ liệu đã được tải từ controller quản trị, bạn có thể lọc tiếp bằng client-side mà không gọi thẳng API từ trình duyệt.", "Data is preloaded by the admin controller so you can filter client-side without calling the API directly from the browser.")</p>
+            </div>
+        </div>
+
+        <div class="admin-table-toolbar">
+            <div>
+                <label class="form-label">@T("Tìm kiếm", "Search")</label>
+                <input type="text" class="form-control" id="adminSearchInput" placeholder="@(T("Nhập tên, email hoặc mã người dùng...", "Type a name, email, or user ID..."))" />
+            </div>
+            <div>
+                <label class="form-label">@T("Vai trò", "Role")</label>
+                <select class="form-select" id="adminRoleFilter">
+                    <option value="all">@T("Tất cả", "All")</option>
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label">@T("Trạng thái", "Status")</label>
+                <select class="form-select" id="adminStatusFilter">
+                    <option value="all">@T("Tất cả", "All")</option>
+                    <option value="active">@T("Hoạt động", "Active")</option>
+                    <option value="inactive">@T("Không hoạt động", "Inactive")</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="admin-table-wrap">
+            <table class="table admin-users-table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>@T("Người dùng", "User")</th>
+                        <th>@T("Liên hệ", "Contact")</th>
+                        <th>@T("Ngày tạo", "Created")</th>
+                        <th>@T("Vai trò", "Role")</th>
+                        <th>@T("Trạng thái", "Status")</th>
+                        <th class="text-end">@T("Thao tác", "Actions")</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">@T("Đang tải dữ liệu...", "Loading data...")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="admin-pagination-bar">
+            <span class="admin-pagination-info" id="userPaginationInfo"></span>
+            <div class="admin-pagination" id="userPagination"></div>
+        </div>
+    </section>
+</div>
+
+<div class="offcanvas offcanvas-end admin-offcanvas" tabindex="-1" id="offcanvasUserDetail" aria-labelledby="offcanvasUserDetailLabel">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="offcanvasUserDetailLabel">@T("Chi tiết người dùng", "User details")</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <div class="admin-profile-head">
+            <div class="admin-profile-top">
+                <div class="admin-profile-avatar">
+                    <img id="detailAvatar" src="/sneat/img/avatars/default/teams_1.png" alt="avatar" />
+                </div>
+                <div>
+                    <h3 class="admin-profile-name" id="detailFullName">-</h3>
+                    <p class="admin-profile-subtitle" id="detailEmailMuted">-</p>
+                </div>
+            </div>
+            <div class="admin-profile-badges">
+                <span class="badge bg-label-primary" id="detailRoleBadge">-</span>
+                <span class="badge bg-label-secondary" id="detailStatusBadge">-</span>
+            </div>
+        </div>
+
+        <div class="admin-offcanvas-section">
+            <p class="admin-offcanvas-label">@T("Thông tin liên hệ", "Contact information")</p>
+            <div class="admin-detail-list">
+                <div class="admin-detail-item">
+                    <span class="admin-detail-icon"><i class="bx bx-id-card"></i></span>
+                    <div>
+                        <span class="admin-detail-caption">ID</span>
+                        <span class="admin-detail-value" id="detailUserId">-</span>
+                    </div>
+                </div>
+                <div class="admin-detail-item">
+                    <span class="admin-detail-icon"><i class="bx bx-envelope"></i></span>
+                    <div>
+                        <span class="admin-detail-caption">Email</span>
+                        <span class="admin-detail-value" id="detailEmail">-</span>
+                    </div>
+                </div>
+                <div class="admin-detail-item">
+                    <span class="admin-detail-icon"><i class="bx bx-phone"></i></span>
+                    <div>
+                        <span class="admin-detail-caption">@T("Số điện thoại", "Phone")</span>
+                        <span class="admin-detail-value" id="detailPhone">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-offcanvas-section">
+            <p class="admin-offcanvas-label">@T("Thông tin hệ thống", "System information")</p>
+            <div class="admin-detail-list">
+                <div class="admin-detail-item">
+                    <span class="admin-detail-icon"><i class="bx bx-calendar"></i></span>
+                    <div>
+                        <span class="admin-detail-caption">@T("Ngày tạo tài khoản", "Account created")</span>
+                        <span class="admin-detail-value" id="detailCreatedAt">-</span>
+                    </div>
+                </div>
+                <div class="admin-detail-item">
+                    <span class="admin-detail-icon"><i class="bx bx-check-circle"></i></span>
+                    <div>
+                        <span class="admin-detail-caption">@T("Tóm tắt", "Summary")</span>
+                        <span class="admin-detail-value" id="detailSummary">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-offcanvas-section">
+            <a class="btn btn-outline-primary w-100" asp-controller="Admin" asp-action="ErrorReports" asp-route-lang="@lang">
+                <i class="bx bx-link-external me-1"></i>@T("Mở trang hỗ trợ để xử lý chi tiết", "Open support desk for detailed actions")
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const lang = '@lang';
+        const defaultAvatar = '/sneat/img/avatars/default/teams_1.png';
+        const backendUrl = '@apiBaseUrl';
+        const dashboardDataEndpoint = '@Url.Action("DashboardData", "Admin", new { lang = lang })';
+        const reportsIndexUrl = '@Url.Action("ErrorReports", "Admin", new { lang = lang })';
+        const logoutUrl = '@Url.Action("Logout", "Auth", new { lang = lang })';
+        const initialDashboard = @Html.Raw(initialDashboardJson);
+        const adminText = @Html.Raw(JsonSerializer.Serialize(new
+        {
+            loading = T("Đang tải", "Loading"),
+            refresh = T("Làm mới", "Refresh"),
+            loadError = T("Có lỗi xảy ra khi tải dữ liệu.", "Something went wrong while loading data."),
+            dashboardLoadError = T("Không thể tải dashboard admin.", "Unable to load the admin dashboard."),
+            noPhone = T("Chưa có số điện thoại", "No phone number"),
+            notProvided = T("Chưa cập nhật", "Not provided"),
+            active = T("Hoạt động", "Active"),
+            inactive = T("Không hoạt động", "Inactive"),
+            pending = T("Chờ tiếp nhận", "Pending"),
+            inProgress = T("Đang xử lý", "In progress"),
+            replied = T("Đã phản hồi", "Replied"),
+            closed = T("Đã đóng", "Closed"),
+            bug = T("Báo lỗi", "Bug"),
+            transaction = T("Giao dịch", "Transaction"),
+            account = T("Tài khoản", "Account"),
+            feature = T("Tính năng", "Feature"),
+            other = T("Khác", "Other"),
+            urgent = T("Khẩn cấp", "Urgent"),
+            high = T("Cao", "High"),
+            medium = T("Trung bình", "Medium"),
+            low = T("Thấp", "Low"),
+            noMatchingAccounts = T("Không có tài khoản phù hợp.", "No matching accounts found."),
+            noUserData = T("Chưa có dữ liệu người dùng.", "No user data available."),
+            noQueue = T("Không có yêu cầu nào trong hàng chờ.", "The support queue is currently empty."),
+            accountsWord = T("tài khoản", "accounts"),
+            ofAllAccounts = T("trên tổng số tài khoản", "of all accounts"),
+            openHighPriorityTickets = T("ticket ưu tiên cao đang mở", "open high-priority tickets"),
+            latestAccountsShown = T("tài khoản mới nhất đang hiển thị. Dữ liệu cập nhật lần cuối:", "latest accounts shown. Last updated:"),
+            accountsMatchFilter = T("tài khoản phù hợp bộ lọc.", "accounts match the current filters."),
+            today = T("Hôm nay", "Today"),
+            yesterday = T("Hôm qua", "Yesterday"),
+            daysAgo = T("ngày trước", "days ago"),
+            newSignups = T("Đăng ký mới", "New signups"),
+            activeAccounts = T("Tài khoản hoạt động", "Active accounts"),
+            inactiveAccounts = T("Tài khoản không hoạt động", "Inactive accounts"),
+            total = T("Tổng", "Total"),
+            details = T("Chi tiết", "Details")
+        }, serializerOptions));
+
+        let lineChart;
+        let pieChart;
+        let allUsersData = [];
+        let filteredUsersData = [];
+        let currentUserPage = 1;
+        const usersPerPage = 5;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            bindDashboardEvents();
+            hydrateDashboard(initialDashboard);
+        });
+
+        function bindDashboardEvents() {
+            document.getElementById('refreshDashboardBtn')?.addEventListener('click', loadDashboard);
+            document.getElementById('adminSearchInput')?.addEventListener('input', applyFilters);
+            document.getElementById('adminRoleFilter')?.addEventListener('change', applyFilters);
+            document.getElementById('adminStatusFilter')?.addEventListener('change', applyFilters);
+            document.getElementById('userTableBody')?.addEventListener('click', event => {
+                const trigger = event.target.closest('[data-user-id]');
+                if (!trigger) return;
+                showDetail(trigger.getAttribute('data-user-id'));
+            });
+            document.getElementById('userPagination')?.addEventListener('click', event => {
+                const pageTrigger = event.target.closest('[data-page]');
+                if (!pageTrigger || pageTrigger.disabled) return;
+                const page = Number(pageTrigger.getAttribute('data-page')) || 1;
+                currentUserPage = page;
+                renderUserTablePage();
+            });
+        }
+
+        function normalizeDashboard(data) {
+            const safe = data || {};
+            const rawUsers = safe.recentUsers || safe.RecentUsers || safe.recent_users || [];
+            const rawRequests = safe.recentPendingRequests || safe.RecentPendingRequests || safe.recent_pending_requests || [];
+            return {
+                totalUsers: Number(safe.totalUsers ?? safe.TotalUsers ?? safe.total_users) || 0,
+                activeUsers: Number(safe.activeUsers ?? safe.ActiveUsers ?? safe.active_users) || 0,
+                inactiveUsers: Number(safe.inactiveUsers ?? safe.InactiveUsers ?? safe.inactive_users) || 0,
+                pendingRequests: Number(safe.pendingRequests ?? safe.PendingRequests ?? safe.pending_requests) || 0,
+                newUsersToday: Number(safe.newUsersToday ?? safe.NewUsersToday ?? safe.new_users_today) || 0,
+                newUsersWeekTotal: Number(safe.newUsersWeekTotal ?? safe.NewUsersWeekTotal ?? safe.new_users_week_total) || 0,
+                highPriorityOpenRequests: Number(safe.highPriorityOpenRequests ?? safe.HighPriorityOpenRequests ?? safe.high_priority_open_requests) || 0,
+                lastUpdatedAt: safe.lastUpdatedAt || safe.LastUpdatedAt || safe.last_updated_at || null,
+                newUsersWeek: Array.isArray(safe.newUsersWeek || safe.NewUsersWeek || safe.new_users_week) ? (safe.newUsersWeek || safe.NewUsersWeek || safe.new_users_week).map(value => Number(value) || 0) : [0, 0, 0, 0, 0, 0, 0],
+                newUsersWeekLabels: Array.isArray(safe.newUsersWeekLabels || safe.NewUsersWeekLabels || safe.new_users_week_labels) && (safe.newUsersWeekLabels || safe.NewUsersWeekLabels || safe.new_users_week_labels).length ? (safe.newUsersWeekLabels || safe.NewUsersWeekLabels || safe.new_users_week_labels) : ['-','-','-','-','-','-','-'],
+                recentUsers: Array.isArray(rawUsers) ? rawUsers.map(normalizeUserItem) : [],
+                recentPendingRequests: Array.isArray(rawRequests) ? rawRequests.map(normalizeSupportItem) : []
+            };
+        }
+
+
+        function normalizeUserItem(user) {
+            const safe = user || {};
+            return {
+                userId: safe.userId || safe.UserId || safe.user_id || '-',
+                fullName: safe.fullName || safe.FullName || safe.full_name || '-',
+                email: safe.email || safe.Email || '-',
+                phoneNumber: safe.phoneNumber || safe.PhoneNumber || safe.phone_number || null,
+                role: safe.role || safe.Role || 'user',
+                status: safe.status || safe.Status || 'inactive',
+                avatar: safe.avatar || safe.Avatar || null,
+                createdAt: safe.createdAt || safe.CreatedAt || safe.created_at || null
+            };
+        }
+
+        function normalizeSupportItem(item) {
+            const safe = item || {};
+            return {
+                supportRequestId: safe.supportRequestId || safe.SupportRequestId || safe.support_request_id || '-',
+                subject: safe.subject || safe.Subject || '-',
+                supportType: safe.supportType || safe.SupportType || safe.support_type || 'other',
+                priority: safe.priority || safe.Priority || 'medium',
+                status: safe.status || safe.Status || 'pending',
+                createdAt: safe.createdAt || safe.CreatedAt || safe.created_at || null,
+                userId: safe.userId || safe.UserId || safe.user_id || '-',
+                userFullName: safe.userFullName || safe.UserFullName || safe.user_full_name || '-',
+                userEmail: safe.userEmail || safe.UserEmail || safe.user_email || null,
+                userAvatar: safe.userAvatar || safe.UserAvatar || safe.user_avatar || null
+            };
+        }
+
+        function hydrateDashboard(data) {
+            const dashboard = normalizeDashboard(data);
+            allUsersData = dashboard.recentUsers;
+            populateMetrics(dashboard);
+            updateCharts(dashboard);
+            renderRecentUsers(dashboard.recentUsers);
+            renderSupportQueue(dashboard.recentPendingRequests);
+            applyFilters();
+        }
+
+        async function loadDashboard() {
+            toggleRefresh(true);
+
+            try {
+                const response = await fetch(dashboardDataEndpoint, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                if (response.status === 401) {
+                    window.location.replace(logoutUrl);
+                    return;
+                }
+
+                if (!response.ok) {
+                    const message = await extractErrorMessage(response);
+                    throw new Error(message || adminText.dashboardLoadError);
+                }
+
+                const data = await response.json();
+                hideAlert();
+                hydrateDashboard(data);
+            } catch (error) {
+                console.error('Admin dashboard load error:', error);
+                showAlert(error?.message || adminText.loadError);
+            } finally {
+                toggleRefresh(false);
+            }
+        }
+
+        function populateMetrics(data) {
+            setText('metricTotalUsers', formatNumber(data.totalUsers));
+            setText('metricActiveUsers', formatNumber(data.activeUsers));
+            setText('metricInactiveUsers', formatNumber(data.inactiveUsers));
+            setText('metricPendingRequests', formatNumber(data.pendingRequests));
+
+            setText('highlightNewToday', formatNumber(data.newUsersToday));
+            setText('highlightNewWeek', formatNumber(data.newUsersWeekTotal));
+            setText('highlightHighPriority', formatNumber(data.highPriorityOpenRequests));
+
+            const activeRatio = calculatePercentage(data.activeUsers, data.totalUsers);
+            const inactiveRatio = calculatePercentage(data.inactiveUsers, data.totalUsers);
+
+            setText('metricActiveUsersMeta', `${activeRatio}% ${adminText.ofAllAccounts}`);
+            setText('metricInactiveUsersMeta', `${inactiveRatio}% ${adminText.ofAllAccounts}`);
+            setText('metricPendingRequestsMeta', `${formatNumber(data.highPriorityOpenRequests)} ${adminText.openHighPriorityTickets}`);
+            setText('tableSummaryText', `${formatNumber(allUsersData.length)} ${adminText.latestAccountsShown} ${formatDateTime(data.lastUpdatedAt)}`);
+        }
+
+        function initCharts() {
+            const trendCanvas = document.getElementById('userTrendChartCanvas');
+            const statusCanvas = document.getElementById('userStatusChartCanvas');
+            if (!trendCanvas || !statusCanvas || typeof Chart === 'undefined') return;
+
+            if (lineChart) lineChart.destroy();
+            lineChart = new Chart(trendCanvas, {
+                type: 'line',
+                data: {
+                    labels: ['-','-','-','-','-','-','-'],
+                    datasets: [{
+                        label: adminText.newSignups,
+                        data: [0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(105, 108, 255, 0.95)',
+                        backgroundColor: 'rgba(105, 108, 255, 0.14)',
+                        tension: 0.34,
+                        fill: true,
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            align: 'end',
+                            labels: { usePointStyle: true, boxWidth: 10, boxHeight: 10, color: '#637381', font: { weight: 700 } }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: context => `${context.dataset.label}: ${formatNumber(context.parsed.y)} ${adminText.accountsWord}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: '#8291a6', font: { weight: 600 } } },
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#8291a6', precision: 0, callback: value => formatNumber(value) },
+                            grid: { color: 'rgba(130, 145, 166, 0.14)' }
+                        }
+                    }
+                }
+            });
+
+            if (pieChart) pieChart.destroy();
+            pieChart = new Chart(statusCanvas, {
+                type: 'doughnut',
+                data: {
+                    labels: [adminText.active, adminText.inactive],
+                    datasets: [{
+                        data: [0, 0],
+                        backgroundColor: ['#71dd37', '#ff3e1d'],
+                        borderColor: '#fff',
+                        borderWidth: 4,
+                        hoverOffset: 8,
+                        spacing: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '68%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { usePointStyle: true, boxWidth: 10, boxHeight: 10, color: '#637381', font: { weight: 700 } }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: context => {
+                                    const value = Number(context.parsed || 0);
+                                    const total = (context.dataset.data || []).reduce((sum, current) => sum + Number(current || 0), 0);
+                                    const percent = total ? (value / total) * 100 : 0;
+                                    return `${context.label}: ${formatNumber(value)} (${percent.toFixed(1).replace(/\.0$/, '')}%)`;
+                                }
+                            }
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'adminDoughnutCenterText',
+                    afterDraw(chart) {
+                        const meta = chart.getDatasetMeta(0);
+                        const arc = meta?.data?.[0];
+                        if (!arc) return;
+                        const { ctx } = chart;
+                        const total = (chart.data.datasets[0].data || []).reduce((sum, value) => sum + Number(value || 0), 0);
+                        ctx.save();
+                        ctx.textAlign = 'center';
+                        ctx.fillStyle = '#7b8794';
+                        ctx.font = '600 13px Inter, system-ui, sans-serif';
+                        ctx.fillText(adminText.total, arc.x, arc.y - 10);
+                        ctx.fillStyle = '#1f2937';
+                        ctx.font = '800 28px Inter, system-ui, sans-serif';
+                        ctx.fillText(formatNumber(total), arc.x, arc.y + 20);
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+
+        function updateCharts(data) {
+            if (lineChart) {
+                lineChart.data.labels = data.newUsersWeekLabels;
+                lineChart.data.datasets[0].label = adminText.newSignups;
+                lineChart.data.datasets[0].data = data.newUsersWeek;
+                lineChart.update();
+            }
+            if (pieChart) {
+                pieChart.data.labels = [adminText.active, adminText.inactive];
+                pieChart.data.datasets[0].data = [Number(data.activeUsers) || 0, Number(data.inactiveUsers) || 0];
+                pieChart.update();
+            }
+        }
+
+        function renderRecentUsers(users) {
+            const container = document.getElementById('recentUsersList');
+            if (!container) return;
+
+            if (!Array.isArray(users) || users.length === 0) {
+                container.innerHTML = `<div class="admin-empty">${escapeHtml(adminText.noUserData)}</div>`;
+                return;
+            }
+
+            container.innerHTML = users.slice(0, 5).map(user => {
+                const avatar = getAvatarUrl(user.avatar);
+                return `
+                    <div class="admin-list-item">
+                        <div class="admin-list-person">
+                            <div class="admin-list-avatar">
+                                <img src="${avatar}" alt="avatar" onerror="this.src='${defaultAvatar}'" />
+                            </div>
+                            <div>
+                                <p class="admin-list-name">${escapeHtml(user.fullName || '-')}</p>
+                                <p class="admin-list-meta">${escapeHtml(user.email || '-')} · ${formatDateTime(user.createdAt)}</p>
+                            </div>
+                        </div>
+                        <div class="admin-pill-group">
+                            <span class="badge ${roleBadgeClass(user.role)}">${escapeHtml(getRoleLabel(user.role))}</span>
+                            <span class="badge ${userStatusBadgeClass(user.status)}">${escapeHtml(getUserStatusLabel(user.status))}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderSupportQueue(items) {
+            const container = document.getElementById('supportQueueList');
+            if (!container) return;
+
+            if (!Array.isArray(items) || items.length === 0) {
+                container.innerHTML = `<div class="admin-empty">${escapeHtml(adminText.noQueue)}</div>`;
+                return;
+            }
+
+            container.innerHTML = items.map(item => {
+                const detailUrl = buildReportDetailUrl(item.supportRequestId);
+                return `
+                    <a class="admin-queue-item text-decoration-none" href="${detailUrl}">
+                        <div>
+                            <p class="admin-queue-subject">${escapeHtml(item.subject || '-')}</p>
+                            <p class="admin-queue-meta">${escapeHtml(item.userFullName || '-')} · ${escapeHtml(getSupportTypeLabel(item.supportType))} · ${formatDateTime(item.createdAt)}</p>
+                        </div>
+                        <div class="admin-pill-group">
+                            <span class="badge ${priorityBadgeClass(item.priority)}">${escapeHtml(getPriorityLabel(item.priority))}</span>
+                            <span class="badge ${supportStatusBadgeClass(item.status)}">${escapeHtml(getSupportStatusLabel(item.status))}</span>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        function applyFilters() {
+            const keyword = (document.getElementById('adminSearchInput')?.value || '').trim().toLowerCase();
+            const roleFilter = (document.getElementById('adminRoleFilter')?.value || 'all').toLowerCase();
+            const statusFilter = (document.getElementById('adminStatusFilter')?.value || 'all').toLowerCase();
+
+            filteredUsersData = allUsersData.filter(user => {
+                const haystack = [user.fullName, user.email, user.userId, user.phoneNumber]
+                    .filter(Boolean)
+                    .join(' ')
+                    .toLowerCase();
+                const matchesKeyword = !keyword || haystack.includes(keyword);
+                const matchesRole = roleFilter === 'all' || (user.role || '').toLowerCase() === roleFilter;
+                const normalizedStatus = normalizeUserStatus(user.status);
+                const matchesStatus = statusFilter === 'all' || normalizedStatus === statusFilter;
+                return matchesKeyword && matchesRole && matchesStatus;
+            });
+
+            currentUserPage = 1;
+            renderUserTablePage();
+            setText('tableSummaryText', `${formatNumber(filteredUsersData.length)} / ${formatNumber(allUsersData.length)} ${adminText.accountsMatchFilter}`);
+        }
+
+        function renderUserTablePage() {
+            const totalItems = filteredUsersData.length;
+            const totalPages = Math.max(1, Math.ceil(totalItems / usersPerPage));
+            currentUserPage = Math.min(Math.max(currentUserPage, 1), totalPages);
+
+            const startIndex = totalItems ? (currentUserPage - 1) * usersPerPage : 0;
+            const pageItems = filteredUsersData.slice(startIndex, startIndex + usersPerPage);
+
+            renderUserTable(pageItems);
+            renderPagination(totalItems, totalPages, startIndex);
+        }
+
+        function renderUserTable(users) {
+            const tbody = document.getElementById('userTableBody');
+            if (!tbody) return;
+
+            if (!Array.isArray(users) || users.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">${escapeHtml(adminText.noMatchingAccounts)}</td>
+                    </tr>`;
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => {
+                const avatar = getAvatarUrl(user.avatar);
+                return `
+                    <tr>
+                        <td>
+                            <div class="admin-user-cell">
+                                <div class="admin-user-avatar">
+                                    <img src="${avatar}" alt="avatar" onerror="this.src='${defaultAvatar}'" />
+                                </div>
+                                <div>
+                                    <p class="admin-user-name">${escapeHtml(user.fullName || '-')}</p>
+                                    <p class="admin-user-sub">${escapeHtml(user.userId || '-')}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="admin-user-name mb-0">${escapeHtml(user.email || '-')}</p>
+                            <p class="admin-user-sub">${escapeHtml(user.phoneNumber || adminText.noPhone)}</p>
+                        </td>
+                        <td>
+                            <p class="admin-user-name mb-0">${formatDateTime(user.createdAt)}</p>
+                            <p class="admin-user-sub">${escapeHtml(relativeTime(user.createdAt))}</p>
+                        </td>
+                        <td><span class="badge ${roleBadgeClass(user.role)}">${escapeHtml(getRoleLabel(user.role))}</span></td>
+                        <td><span class="badge ${userStatusBadgeClass(user.status)}">${escapeHtml(getUserStatusLabel(user.status))}</span></td>
+                        <td class="text-end">
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-user-id="${escapeHtml(user.userId || '')}">
+                                <i class="bx bx-show me-1"></i>${escapeHtml(adminText.details)}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderPagination(totalItems, totalPages, startIndex) {
+            const info = document.getElementById('userPaginationInfo');
+            const container = document.getElementById('userPagination');
+            if (!info || !container) return;
+
+            if (!totalItems) {
+                info.textContent = '';
+                container.innerHTML = '';
+                return;
+            }
+
+            const from = startIndex + 1;
+            const to = Math.min(startIndex + usersPerPage, totalItems);
+            info.innerHTML = `${escapeHtml(lang === 'en' ? 'Showing' : 'Hiển thị')} <strong>${formatNumber(from)} - ${formatNumber(to)}</strong> ${escapeHtml(lang === 'en' ? 'of total' : 'trên tổng số')} <strong>${formatNumber(totalItems)}</strong> ${escapeHtml(lang === 'en' ? 'accounts' : 'tài khoản')}`;
+
+            if (totalItems <= usersPerPage) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const startPage = Math.max(1, Math.min(currentUserPage - 1, totalPages - 2));
+            const endPage = Math.min(totalPages, startPage + 2);
+            const pages = [];
+            for (let page = startPage; page <= endPage; page += 1) {
+                pages.push(page);
+            }
+
+            const html = [
+                `<button type="button" class="admin-page-nav" data-page="${currentUserPage - 1}" ${currentUserPage === 1 ? 'disabled' : ''} aria-label="${escapeHtml(lang === 'en' ? 'Previous page' : 'Trang trước')}"><i class="bx bx-chevron-left"></i></button>`,
+                ...pages.map(page => `<button type="button" class="${page === currentUserPage ? 'active' : ''}" data-page="${page}">${page}</button>`),
+                `<button type="button" class="admin-page-nav" data-page="${currentUserPage + 1}" ${currentUserPage === totalPages ? 'disabled' : ''} aria-label="${escapeHtml(lang === 'en' ? 'Next page' : 'Trang sau')}"><i class="bx bx-chevron-right"></i></button>`
+            ].join('');
+
+            container.innerHTML = html;
+        }
+
+        function showDetail(userId) {
+            const user = allUsersData.find(item => item.userId === userId);
+            if (!user) return;
+
+            setImage('detailAvatar', getAvatarUrl(user.avatar));
+            setText('detailFullName', user.fullName || '-');
+            setText('detailEmailMuted', user.email || '-');
+            setText('detailRoleBadge', getRoleLabel(user.role));
+            setText('detailStatusBadge', getUserStatusLabel(user.status));
+            setText('detailUserId', user.userId || '-');
+            setText('detailEmail', user.email || '-');
+            setText('detailPhone', user.phoneNumber || adminText.notProvided);
+            setText('detailCreatedAt', formatDateTime(user.createdAt));
+            setText('detailSummary', `${getRoleLabel(user.role)} · ${getUserStatusLabel(user.status)} · ${relativeTime(user.createdAt)}`);
+
+            document.getElementById('detailRoleBadge')?.setAttribute('class', `badge ${roleBadgeClass(user.role)}`);
+            document.getElementById('detailStatusBadge')?.setAttribute('class', `badge ${userStatusBadgeClass(user.status)}`);
+
+            bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('offcanvasUserDetail')).show();
+        }
+
+        async function extractErrorMessage(response) {
+            try {
+                const payload = await response.json();
+                return payload?.detail || payload?.message || response.statusText;
+            } catch {
+                return response.statusText;
+            }
+        }
+
+        function buildReportDetailUrl(requestId) {
+            const url = new URL(reportsIndexUrl, window.location.origin);
+            url.searchParams.set('selectedId', requestId);
+            return `${url.pathname}${url.search}`;
+        }
+
+        function getAvatarUrl(path) {
+            if (!path) return defaultAvatar;
+            if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('/')) return path;
+            return `${backendUrl}/${path.replace(/^\/+/, '')}`;
+        }
+
+        function normalizeUserStatus(status) {
+            return (status || '').toLowerCase() === 'active' ? 'active' : 'inactive';
+        }
+
+        function getUserStatusLabel(status) {
+            return normalizeUserStatus(status) === 'active'
+                ? adminText.active
+                : adminText.inactive;
+        }
+
+        function getSupportStatusLabel(status) {
+            switch ((status || '').toLowerCase()) {
+                case 'pending': return adminText.pending;
+                case 'viewed': return adminText.inProgress;
+                case 'replied': return adminText.replied;
+                case 'closed': return adminText.closed;
+                default: return status || '-';
+            }
+        }
+
+        function getRoleLabel(role) {
+            return (role || '').toLowerCase() === 'admin' ? 'Admin' : 'User';
+        }
+
+        function getSupportTypeLabel(type) {
+            switch ((type || '').toLowerCase()) {
+                case 'bug': return adminText.bug;
+                case 'transaction': return adminText.transaction;
+                case 'account': return adminText.account;
+                case 'feature': return adminText.feature;
+                default: return adminText.other;
+            }
+        }
+
+        function getPriorityLabel(priority) {
+            switch ((priority || '').toLowerCase()) {
+                case 'urgent': return adminText.urgent;
+                case 'high': return adminText.high;
+                case 'low': return adminText.low;
+                default: return adminText.medium;
+            }
+        }
+
+        function roleBadgeClass(role) {
+            return (role || '').toLowerCase() === 'admin' ? 'bg-label-primary' : 'bg-label-info';
+        }
+
+        function userStatusBadgeClass(status) {
+            return normalizeUserStatus(status) === 'active' ? 'bg-label-success' : 'bg-label-secondary';
+        }
+
+        function supportStatusBadgeClass(status) {
+            switch ((status || '').toLowerCase()) {
+                case 'pending': return 'bg-label-primary';
+                case 'viewed': return 'bg-label-warning';
+                case 'replied': return 'bg-label-success';
+                case 'closed': return 'bg-label-secondary';
+                default: return 'bg-label-secondary';
+            }
+        }
+
+        function priorityBadgeClass(priority) {
+            switch ((priority || '').toLowerCase()) {
+                case 'urgent': return 'bg-label-danger';
+                case 'high': return 'bg-label-warning';
+                case 'low': return 'bg-label-info';
+                default: return 'bg-label-primary';
+            }
+        }
+
+        function relativeTime(value) {
+            const date = value ? new Date(value) : null;
+            if (!date || Number.isNaN(date.getTime())) return '-';
+            const diffMs = Date.now() - date.getTime();
+            const diffDays = Math.floor(diffMs / 86400000);
+            if (diffDays <= 0) return adminText.today;
+            if (diffDays === 1) return adminText.yesterday;
+            return `${diffDays} ${adminText.daysAgo}`;
+        }
+
+        function formatDateTime(value) {
+            const date = value ? new Date(value) : null;
+            if (!date || Number.isNaN(date.getTime())) return '-';
+            return new Intl.DateTimeFormat(lang === 'en' ? 'en-GB' : 'vi-VN', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).format(date);
+        }
+
+        function formatNumber(value) {
+            return new Intl.NumberFormat(lang === 'en' ? 'en-US' : 'vi-VN').format(Number(value) || 0);
+        }
+
+        function calculatePercentage(value, total) {
+            const safeTotal = Number(total) || 0;
+            if (!safeTotal) return 0;
+            return Math.round(((Number(value) || 0) / safeTotal) * 100);
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function setText(id, value) {
+            const element = document.getElementById(id);
+            if (element) element.textContent = value;
+        }
+
+        function setImage(id, src) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.src = src || defaultAvatar;
+                element.onerror = () => {
+                    element.src = defaultAvatar;
+                };
+            }
+        }
+
+        function showAlert(message) {
+            const alert = document.getElementById('dashboardAlert');
+            if (!alert) return;
+            alert.textContent = message;
+            alert.classList.remove('d-none');
+        }
+
+        function hideAlert() {
+            const alert = document.getElementById('dashboardAlert');
+            if (!alert) return;
+            if (alert.textContent?.trim()) {
+                alert.classList.add('d-none');
+            }
+        }
+
+        function toggleRefresh(isLoading) {
+            const button = document.getElementById('refreshDashboardBtn');
+            if (!button) return;
+            button.disabled = !!isLoading;
+            button.innerHTML = isLoading
+                ? `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>${escapeHtml(adminText.loading)}`
+                : `<i class="bx bx-refresh me-1"></i>${escapeHtml(adminText.refresh)}`;
+        }
+    </script>
+}

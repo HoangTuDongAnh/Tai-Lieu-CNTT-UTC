@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=DESUtil
+comment1.params=hex
+comment1.target=java.lang.String\ hexToBin(java.lang.String)
+comment2.params=bin
+comment2.target=java.lang.String\ binToHex(java.lang.String)
+comment3.params=input\ table
+comment3.target=java.lang.String\ permute(java.lang.String,\ int[])
+comment4.params=a\ b
+comment4.target=java.lang.String\ xorBits(java.lang.String,\ java.lang.String)
+comment5.params=input
+comment5.target=java.lang.String[]\ splitInHalf(java.lang.String)
+comment6.params=input\ shift
+comment6.target=java.lang.String\ leftRotate(java.lang.String,\ int)
+comment7.params=value
+comment7.target=java.lang.String\ to4BitBinary(int)
+numComments=8

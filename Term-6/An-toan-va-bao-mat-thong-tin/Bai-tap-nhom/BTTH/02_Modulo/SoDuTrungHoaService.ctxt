@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=SoDuTrungHoaService
+comment1.params=
+comment1.target=SoDuTrungHoaService()
+comment2.params=he
+comment2.target=boolean\ kiemTraNguyenToCungNhauTungDoi(PhuongTrinhModulo[])
+comment3.params=he
+comment3.target=long\ giaiHe(PhuongTrinhModulo[])
+comment4.params=a\ k\ n\ cacModulo
+comment4.target=long\ tinhModuloLonBangCRT(long,\ long,\ long,\ long[])
+comment5.params=a\ k\ n
+comment5.target=long\ tinhModuloLonBangCRTTuDong(long,\ long,\ long)
+comment6.params=a\ k\ n
+comment6.target=long\ tinhLuyThuaTheoTachMod(long,\ long,\ long)
+comment7.params=a\ k\ mi
+comment7.target=long\ tinhTrenModuloCon(long,\ long,\ long)
+comment8.params=n
+comment8.target=long[]\ tachMod(long)
+numComments=9

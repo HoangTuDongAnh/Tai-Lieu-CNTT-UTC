@@ -1,0 +1,430 @@
+﻿@model ExpenseWeb.Models.ViewModels.Auth.LoginViewModel
+@using ExpenseWeb.Models.ViewModels.Auth
+
+@{
+    var lang = (Context.Request.Query["lang"].FirstOrDefault() ?? "vi").ToLower();
+    if (lang != "en") lang = "vi";
+    string T(string vi, string en) => lang == "en" ? en : vi;
+
+    ViewBag.Title = T("Đăng nhập", "Login");
+    ViewBag.AuthPageClass = "auth-page--slider";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+
+    var registerModel = ViewBag.RegisterModel as RegisterViewModel ?? new RegisterViewModel();
+    var openRegister = ViewBag.OpenRegister as bool? ?? false;
+    var loginErrorsJson = ViewData["LoginErrorsJson"]?.ToString() ?? "[]";
+    var registerErrorsJson = ViewData["RegisterErrorsJson"]?.ToString() ?? "[]";
+
+    string SwitchLangUrl(string targetLang)
+    {
+        return Url.Action("Login", "Auth", new { lang = targetLang }) ?? "#";
+    }
+}
+
+<div class="auth-page">
+    <div class="auth-toast-stack" id="authToastStack"></div>
+
+    <div class="auth-slider-shell">
+        <div class="auth-slider @(openRegister ? "right-panel-active" : "")" id="authSlider">
+
+            <div class="auth-mobile-topbar">
+                <a href="@Url.Action("Login", "Auth", new { lang = lang })" class="auth-mobile-brand">
+                    <span class="auth-brand-mark auth-brand-mark--accent">
+                        <span class="auth-brand-letter">M</span>
+                    </span>
+                    <span>Mimo</span>
+                </a>
+
+                <div class="auth-language">
+                    <a href="@SwitchLangUrl("vi")" class="@(lang == "vi" ? "active" : "")">VI</a>
+                    <a href="@SwitchLangUrl("en")" class="@(lang == "en" ? "active" : "")">EN</a>
+                </div>
+            </div>
+
+            <div class="auth-mobile-hero">
+                @if (openRegister)
+                {
+                    <h3>@T("Tạo tài khoản mới", "Create your account")</h3>
+                    <p>@T("Đăng ký nhanh để bắt đầu quản lý chi tiêu cá nhân.", "Sign up quickly to start managing your personal finances.")</p>
+                }
+                else
+                {
+                    <h3>@T("Chào mừng trở lại", "Welcome back")</h3>
+                    <p>@T("Đăng nhập để tiếp tục theo dõi ví, giao dịch và ngân sách của bạn.", "Sign in to continue tracking your wallets, transactions, and budgets.")</p>
+                }
+            </div>
+
+            <div class="auth-language d-none d-md-inline-flex">
+                <a href="@SwitchLangUrl("vi")" class="@(lang == "vi" ? "active" : "")">VI</a>
+                <a href="@SwitchLangUrl("en")" class="@(lang == "en" ? "active" : "")">EN</a>
+            </div>
+
+            <!-- SIGN IN -->
+            <section class="auth-form-side auth-sign-in">
+                <div class="auth-form-inner">
+                    <div class="auth-form-wrap">
+                        <div class="auth-eyebrow">@T("Đăng nhập tài khoản", "Account sign in")</div>
+                        <h2>@T("Bắt đầu phiên làm việc", "Start your session")</h2>
+                        <p class="auth-form-subtitle">
+                            @T(
+                            "Nhập thông tin đăng nhập để truy cập hệ thống quản lý chi tiêu cá nhân.",
+                                                        "Enter your credentials to access your personal expense management system."
+                                                        )
+                        </p>
+
+                        <form asp-action="Login"
+                              asp-controller="Auth"
+                              method="post"
+                              class="auth-card-form"
+                              data-auth-form="login">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="lang" value="@lang" />
+
+                            <div class="auth-field">
+                                <label asp-for="Email">@T("Email", "Email")</label>
+                                <div class="auth-input-wrap">
+                                    <i class="bx bx-envelope auth-input-icon"></i>
+                                    <input asp-for="Email"
+                                           class="auth-input"
+                                           placeholder="@T("Nhập email của bạn", "Enter your email")"
+                                           autocomplete="email"
+                                           autofocus />
+                                </div>
+                            </div>
+
+                            <div class="auth-field">
+                                <label asp-for="Password">@T("Mật khẩu", "Password")</label>
+                                <div class="auth-input-wrap">
+                                    <i class="bx bx-lock-alt auth-input-icon"></i>
+                                    <input asp-for="Password"
+                                           id="loginPassword"
+                                           type="password"
+                                           class="auth-input-password"
+                                           placeholder="••••••••••••"
+                                           autocomplete="current-password" />
+                                    <button type="button"
+                                            class="auth-password-toggle"
+                                            data-password-toggle="loginPassword"
+                                            tabindex="-1">
+                                        <i class="bx bx-hide"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="auth-row">
+                                <label class="auth-check">
+                                    <input asp-for="RememberMe" />
+                                    <span>@T("Ghi nhớ đăng nhập", "Remember me")</span>
+                                </label>
+
+                                <a href="@Url.Action("ForgotPassword", "Auth", new { lang = lang })" class="auth-link">
+                                    @T("Quên mật khẩu?", "Forgot password?")
+                                </a>
+                            </div>
+
+                            <button type="submit"
+                                    class="auth-submit"
+                                    data-submit-text
+                                    data-loading-text="@T("Đang đăng nhập...", "Signing in...")">
+                                @T("Đăng nhập", "Sign in")
+                            </button>
+                        </form>
+
+                        <div class="auth-switch">
+                            @T("Bạn chưa có tài khoản?", "Don’t have an account yet?")
+                            <a href="javascript:void(0)" data-auth-toggle="signup">@T("Đăng ký ngay", "Create one now")</a>
+                        </div>
+
+                        <div class="auth-footer-note">
+                            <strong>Mimo</strong> —
+                            @T("Hệ thống quản lý chi tiêu cá nhân", "Personal Expense Management System")
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SIGN UP -->
+            <section class="auth-form-side auth-sign-up">
+                <div class="auth-form-inner">
+                    <div class="auth-form-wrap">
+                        <div class="auth-eyebrow">@T("Tạo tài khoản", "Create account")</div>
+                        <h2>@T("Đăng ký thành viên mới", "Register a new account")</h2>
+                        <p class="auth-form-subtitle">
+                            @T(
+                                                        "Điền thông tin bên dưới để bắt đầu sử dụng hệ thống quản lý chi tiêu cá nhân.",
+                                                        "Fill in the fields below to start using the personal expense management system."
+                                                        )
+                        </p>
+
+                        <form asp-action="Register"
+                              asp-controller="Auth"
+                              method="post"
+                              class="auth-card-form"
+                              data-auth-form="register">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="lang" value="@lang" />
+
+                            <div class="auth-field">
+                                <label for="FullName">@T("Họ và tên", "Full name")</label>
+                                <div class="auth-input-wrap">
+                                    <i class="bx bx-user auth-input-icon"></i>
+                                    <input name="FullName"
+                                           id="FullName"
+                                           value="@registerModel.FullName"
+                                           class="auth-input"
+                                           placeholder="@T("Nhập họ và tên", "Enter your full name")"
+                                           autocomplete="name" />
+                                </div>
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="RegisterEmail">@T("Email", "Email")</label>
+                                <div class="auth-input-wrap">
+                                    <i class="bx bx-envelope auth-input-icon"></i>
+                                    <input name="Email"
+                                           id="RegisterEmail"
+                                           value="@registerModel.Email"
+                                           class="auth-input"
+                                           placeholder="@T("Nhập địa chỉ email", "Enter your email address")"
+                                           autocomplete="email" />
+                                </div>
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="RegisterPassword">@T("Mật khẩu", "Password")</label>
+                                <div class="auth-input-wrap">
+                                    <i class="bx bx-lock-alt auth-input-icon"></i>
+                                    <input name="Password"
+                                           id="RegisterPassword"
+                                           type="password"
+                                           class="auth-input-password"
+                                           placeholder="••••••••••••"
+                                           autocomplete="new-password" />
+                                    <button type="button"
+                                            class="auth-password-toggle"
+                                            data-password-toggle="RegisterPassword"
+                                            tabindex="-1">
+                                        <i class="bx bx-hide"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="ConfirmPassword">@T("Nhập lại mật khẩu", "Confirm password")</label>
+                                <div class="auth-input-wrap">
+                                    <i class="bx bx-lock-alt auth-input-icon"></i>
+                                    <input name="ConfirmPassword"
+                                           id="ConfirmPassword"
+                                           type="password"
+                                           class="auth-input-password"
+                                           placeholder="••••••••••••"
+                                           autocomplete="new-password" />
+                                    <button type="button"
+                                            class="auth-password-toggle"
+                                            data-password-toggle="ConfirmPassword"
+                                            tabindex="-1">
+                                        <i class="bx bx-hide"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="auth-field">
+                                <label class="auth-check">
+                                    <input type="checkbox" name="AgreeTerms" value="true"
+                                    @(registerModel.AgreeTerms ? "checked" : "") />
+                                    <span>@T("Tôi đồng ý với điều khoản và điều kiện sử dụng", "I agree to the terms and conditions")</span>
+                                </label>
+                            </div>
+
+                            <button type="submit"
+                                    class="auth-submit"
+                                    data-submit-text
+                                    data-loading-text="@T("Đang tạo tài khoản...", "Creating account...")">
+                                @T("Đăng ký", "Sign up")
+                            </button>
+                        </form>
+
+                        <div class="auth-switch">
+                            @T("Bạn đã có tài khoản?", "Already have an account?")
+                            <a href="javascript:void(0)" data-auth-toggle="signin">@T("Đăng nhập", "Sign in")</a>
+                        </div>
+
+                        <div class="auth-footer-note">
+                            <strong>Mimo</strong> —
+                            @T("Quản lý ví, giao dịch và ngân sách của bạn", "Manage your wallets, transactions, and budgets")
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- OVERLAY -->
+            <div class="auth-overlay-shell">
+                <div class="auth-overlay">
+                    <div class="auth-overlay-panel auth-overlay-left">
+                        <div class="auth-hero-art">
+                            <span class="auth-shape shape-1"></span>
+                            <span class="auth-shape shape-2"></span>
+                            <span class="auth-shape shape-3"></span>
+                            <span class="auth-line line-1"></span>
+                            <span class="auth-line line-2"></span>
+                            <span class="auth-line line-3"></span>
+                        </div>
+
+                        <a href="@Url.Action("Login", "Auth", new { lang = lang })" class="auth-brand">
+                            <span class="auth-brand-mark auth-brand-mark--accent">
+                                <span class="auth-brand-letter">M</span>
+                            </span>
+                            <span>Mimo</span>
+                        </a>
+
+                        <div class="auth-overlay-content">
+                            <div class="auth-badge">
+                                <i class="bx bx-leaf"></i>
+                                <span>@T("Khởi đầu gọn gàng", "A clean start")</span>
+                            </div>
+
+                            <h1>@T("Bắt đầu quản lý chi tiêu dễ dàng", "Start managing your finances with ease")</h1>
+                            <p>
+                                @T(
+                                                                "Tạo tài khoản để lưu trữ giao dịch, quản lý danh mục và theo dõi ngân sách cá nhân một cách trực quan.",
+                                                                "Create an account to save transactions, manage categories, and track your personal budgets in a simple, visual way."
+                                                                )
+                            </p>
+
+                            <div class="auth-hero-points">
+                                <div class="auth-hero-point">
+                                    <i class="bx bx-user-plus"></i>
+                                    <span>@T("Đăng ký nhanh với thông tin cơ bản", "Sign up quickly with basic information")</span>
+                                </div>
+                                <div class="auth-hero-point">
+                                    <i class="bx bx-check-shield"></i>
+                                    <span>@T("Xác thực email để bảo vệ tài khoản", "Verify email to secure your account")</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="auth-ghost-btn" data-auth-toggle="signin">
+                            @T("Đăng nhập", "Sign in")
+                        </button>
+                    </div>
+
+                    <div class="auth-overlay-panel auth-overlay-right">
+                        <div class="auth-hero-art">
+                            <span class="auth-shape shape-1"></span>
+                            <span class="auth-shape shape-2"></span>
+                            <span class="auth-shape shape-3"></span>
+                            <span class="auth-line line-1"></span>
+                            <span class="auth-line line-2"></span>
+                            <span class="auth-line line-3"></span>
+                        </div>
+
+                        <a href="@Url.Action("Login", "Auth", new { lang = lang })" class="auth-brand">
+                            <span class="auth-brand-mark auth-brand-mark--accent">
+                                <span class="auth-brand-letter">M</span>
+                            </span>
+                            <span>Mimo</span>
+                        </a>
+
+                        <div class="auth-overlay-content">
+                            <div class="auth-badge">
+                                <i class="bx bx-shield-quarter"></i>
+                                <span>@T("Bảo mật và đơn giản", "Secure and simple")</span>
+                            </div>
+
+                            <h1>@T("Chào mừng trở lại", "Welcome back")</h1>
+                            <p>
+                                @T(
+                                                                "Đăng nhập để tiếp tục theo dõi ví, giao dịch và hạn mức chi tiêu cá nhân của bạn trong một không gian gọn gàng, dễ kiểm soát.",
+                                                                "Sign in to keep tracking your wallets, transactions, and personal budget limits in one clean and organized workspace."
+                                                                )
+                            </p>
+
+                            <div class="auth-hero-points">
+                                <div class="auth-hero-point">
+                                    <i class="bx bx-wallet-alt"></i>
+                                    <span>@T("Theo dõi số dư ví và dòng tiền", "Track wallet balances and cash flow")</span>
+                                </div>
+                                <div class="auth-hero-point">
+                                    <i class="bx bx-bar-chart-alt-2"></i>
+                                    <span>@T("Xem báo cáo thu chi trực quan", "View clear income and expense reports")</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="auth-ghost-btn" data-auth-toggle="signup">
+                            @T("Đăng ký ngay", "Create account")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.querySelector('[data-auth-form="login"]');
+            if (!loginForm) return;
+
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const email = document.querySelector('[name="Email"]').value;
+                const password = document.querySelector('[name="Password"]').value;
+                const submitBtn = this.querySelector('.auth-submit');
+
+                submitBtn.disabled = true;
+                submitBtn.innerText = "Đang xác thực...";
+
+                try {
+                    // 1. Gọi API FastAPI
+                    const res = await fetch("http://127.0.0.1:8000/auth/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email: email, password: password })
+                    });
+
+                    // ✅ CHỈ ĐỌC JSON MỘT LẦN DUY NHẤT
+                    const data = await res.json();
+
+                            if (res.ok) {
+            const data = await res.json();
+            localStorage.setItem("access_token", data.access_token);
+
+            // ✅ Gửi đầy đủ thông tin, bao gồm cả avatar sang C#
+            await fetch("/Auth/SetTokenToSession", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    accessToken: data.access_token,
+                    role: data.user.role,
+                    email: data.user.email,
+                    fullName: data.user.full_name,
+                    avatar: data.user.avatar // ✅ Gửi ảnh đại diện về
+                })
+            });
+
+            window.location.replace("/Admin/Index");
+        }
+
+                        if (syncRes.ok) {
+                            window.location.replace("/Admin/Index");
+                        } else {
+                            alert("Đăng nhập thành công nhưng không thể đồng bộ phiên làm việc!");
+                        }
+                    } else {
+                        alert("Lỗi: " + (data.detail || "Tài khoản hoặc mật khẩu không đúng"));
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = "Đăng nhập";
+                    }
+                } catch (err) {
+                    console.error("Lỗi kết nối:", err);
+                    alert("Không thể kết nối tới Backend Port 8000. Hãy chắc chắn Python đang chạy!");
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Đăng nhập";
+                }
+            });
+        });
+    </script>
+}

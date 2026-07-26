@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=LogaritRoiRacService
+comment1.params=
+comment1.target=LogaritRoiRacService()
+comment2.params=a\ b\ n
+comment2.target=java.lang.Long\ timLogarit(long,\ long,\ long)
+numComments=3

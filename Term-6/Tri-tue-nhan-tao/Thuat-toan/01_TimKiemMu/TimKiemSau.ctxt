@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=TimKiemSau
+comment1.params=trangThaiDau
+comment1.target=TrangThaiTimKiem\ timKiem(TrangThaiTimKiem)
+comment2.params=trangThaiDau\ inBang
+comment2.target=TrangThaiTimKiem\ timKiem(TrangThaiTimKiem,\ boolean)
+numComments=3

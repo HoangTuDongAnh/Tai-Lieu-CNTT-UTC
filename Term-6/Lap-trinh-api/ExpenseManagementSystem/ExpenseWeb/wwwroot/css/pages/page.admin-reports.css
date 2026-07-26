@@ -1,0 +1,76 @@
+@import url('./fragments/support-page.css');
+@import url('./fragments/core-page-hero.css');
+@import url('./fragments/report-page.css');
+@import url('./fragments/admin-reports.css');
+@import url('./fragments/support-center.css');
+
+.table-custom-scroll {
+  max-height: 600px;
+  overflow-y: auto;
+  display: block;
+}
+
+.table-custom-scroll table {
+  width: 100%;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.carousel-item img:hover {
+  opacity: 0.9;
+  transition: 0.3s;
+}
+
+#mediaPopupModal {
+  z-index: 99999 !important;
+}
+
+.modal-backdrop {
+  z-index: 99998 !important;
+}
+
+.modal-left-area {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: calc(100vw - 600px);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  max-width: none;
+}
+
+.media-popup-item {
+  max-height: 80vh;
+  max-width: 100%;
+  object-fit: contain;
+  background-color: transparent;
+}
+
+video.media-popup-item {
+  background-color: #000;
+  outline: none;
+}
+
+
+.admin-support-modal {
+  z-index: 1080;
+}
+
+#adminSupportLightbox {
+  z-index: 20000;
+}
+
+#adminSupportLightbox .support-lightbox-backdrop {
+  z-index: 0;
+}
+
+#adminSupportLightbox .support-lightbox-dialog {
+  position: relative;
+  z-index: 1;
+}

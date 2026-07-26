@@ -19,6 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ContactAdvance"
+rootProject.name = "contactadvance"
 include(":app")
- 

@@ -1,0 +1,548 @@
+﻿@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+}
+
+<div class="container mt-4 sanpham-page">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h2 class="text-center fw-bold mb-4 text-primary">QUẢN LÝ SẢN PHẨM</h2>
+
+                    <div class="search-box mb-4 p-3 rounded-4 bg-light border">
+                        <h5 class="fw-semibold mb-3">Tìm kiếm sản phẩm</h5>
+                        <div class="row g-3">
+                            <div class="col-md-5">
+                                <label class="form-label">Tên sản phẩm</label>
+                                <input type="text" id="searchTenSP" class="form-control" placeholder="Nhập tên sản phẩm gần đúng..." />
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label">Tên chất liệu</label>
+                                <input type="text" id="searchTenCL" class="form-control" placeholder="Nhập tên chất liệu gần đúng..." />
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <div class="d-grid gap-2 w-100">
+                                    <button type="button" class="btn btn-primary" id="btnTimKiem">Tìm kiếm</button>
+                                    <button type="button" class="btn btn-outline-secondary" id="btnTaiLaiTatCa">Tải lại</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-box mb-4 p-3 rounded-4 border">
+                        <h5 class="fw-semibold mb-3">Thông tin sản phẩm</h5>
+
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Mã sản phẩm</label>
+                                <input type="text" id="MaSP" class="form-control" placeholder="Ví dụ: SP01" />
+                            </div>
+
+                            <div class="col-md-5">
+                                <label class="form-label">Tên sản phẩm</label>
+                                <input type="text" id="TenSP" class="form-control" placeholder="Nhập tên sản phẩm" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Mã chất liệu</label>
+                                <input type="text" id="MaCL" class="form-control" placeholder="Ví dụ: CL01" />
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label">Mô tả</label>
+                                <textarea id="MoTa" class="form-control" rows="3" placeholder="Nhập mô tả sản phẩm"></textarea>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Giá nhập</label>
+                                <input type="number" id="GiaNhap" class="form-control" min="0" placeholder="0" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Giá bán</label>
+                                <input type="number" id="GiaBan" class="form-control" min="0" placeholder="0" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Số lượng</label>
+                                <input type="number" id="SoLuong" class="form-control" min="0" placeholder="0" />
+                            </div>
+                        </div>
+
+                        <div class="mt-4 d-flex flex-wrap gap-2">
+                            <button type="button" class="btn btn-success" id="btnThem">Thêm sản phẩm</button>
+                            <button type="button" class="btn btn-warning text-white" id="btnSua">Cập nhật sản phẩm</button>
+                            <button type="button" class="btn btn-info text-white" id="btnXemTonKho">Xem tồn kho</button>
+                            <button type="button" class="btn btn-dark" id="btnXuatTonKho">Xuất tồn kho CSV</button>
+                            <button type="button" class="btn btn-outline-secondary" id="btnLamMoi">Làm mới form</button>
+                        </div>
+                    </div>
+
+                    <div id="thongBao" class="alert d-none" role="alert"></div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle">
+                            <thead class="table-primary text-center">
+                                <tr>
+                                    <th>Mã SP</th>
+                                    <th>Tên SP</th>
+                                    <th>Mã CL</th>
+                                    <th>Tên CL</th>
+                                    <th>Mô tả</th>
+                                    <th>Giá nhập</th>
+                                    <th>Giá bán</th>
+                                    <th>Số lượng</th>
+                                    <th style="width: 90px;">Sửa</th>
+                                    <th style="width: 90px;">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dsSanPham">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-3 text-end fw-semibold">
+                        Tổng sản phẩm hiển thị: <span id="tongSanPham">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .sanpham-page .card {
+        background: #ffffff;
+    }
+
+    .sanpham-page .form-box,
+    .sanpham-page .search-box {
+        background: #fff;
+    }
+
+    .sanpham-page table td,
+    .sanpham-page table th {
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+        .sanpham-page table td:nth-child(5) {
+            white-space: normal;
+            min-width: 220px;
+        }
+
+    .sanpham-page .btn {
+        min-width: 130px;
+    }
+
+    @@media (max-width: 768px) {
+        .sanpham-page .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        const apiUrl = "http://127.0.0.1:5000/sanpham";
+        let danhSachDangHienThi = [];
+
+        $(document).ready(function () {
+            console.log("Trang sản phẩm đã load");
+            taiTatCaSanPham();
+
+            $("#btnTimKiem").click(function () {
+                timKiemSanPham();
+            });
+
+            $("#btnTaiLaiTatCa").click(function () {
+                taiTatCaSanPham();
+            });
+
+            $("#btnThem").click(function () {
+                themSanPham();
+            });
+
+            $("#btnSua").click(function () {
+                capNhatSanPham();
+            });
+
+            $("#btnLamMoi").click(function () {
+                lamMoiForm();
+            });
+
+            $("#btnXemTonKho").click(function () {
+                xemTonKho();
+            });
+
+            $("#btnXuatTonKho").click(function () {
+                xuatDanhSachTonKho();
+            });
+        });
+
+        function hienThiThongBao(noiDung, loai = "success") {
+            $("#thongBao")
+                .removeClass("d-none alert-success alert-danger alert-warning alert-info")
+                .addClass("alert-" + loai)
+                .text(noiDung);
+        }
+
+        function anThongBao() {
+            $("#thongBao")
+                .removeClass("alert-success alert-danger alert-warning alert-info")
+                .addClass("d-none")
+                .text("");
+        }
+
+        function taiTatCaSanPham() {
+            anThongBao();
+            console.log("GET:", apiUrl + "/getall");
+
+            $.ajax({
+                url: apiUrl + "/getall",
+                type: "GET",
+                success: function (data) {
+                    console.log("Dữ liệu getall:", data);
+                    danhSachDangHienThi = data || [];
+                    renderBangSanPham(danhSachDangHienThi);
+                    hienThiThongBao("Đã tải toàn bộ danh sách sản phẩm.", "info");
+                },
+                error: function (xhr) {
+                    console.log("Lỗi getall:", xhr);
+                    hienThiThongBao("Không tải được danh sách sản phẩm.", "danger");
+                }
+            });
+        }
+
+        function timKiemSanPham() {
+            anThongBao();
+
+            let tenSP = $("#searchTenSP").val().trim();
+            let tenCL = $("#searchTenCL").val().trim();
+
+            $.ajax({
+                url: apiUrl + "/search",
+                type: "GET",
+                data: {
+                    tenSP: tenSP,
+                    tenCL: tenCL
+                },
+                success: function (data) {
+                    danhSachDangHienThi = data || [];
+                    renderBangSanPham(danhSachDangHienThi);
+                    hienThiThongBao("Tìm kiếm thành công.", "success");
+                },
+                error: function (xhr) {
+                    console.log("Lỗi search:", xhr);
+                    hienThiThongBao("Tìm kiếm thất bại.", "danger");
+                }
+            });
+        }
+
+        function xemTonKho() {
+            anThongBao();
+
+            $.ajax({
+                url: apiUrl + "/tonkho",
+                type: "GET",
+                success: function (data) {
+                    danhSachDangHienThi = data || [];
+                    renderBangSanPham(danhSachDangHienThi);
+                    hienThiThongBao("Đang hiển thị danh sách tồn kho.", "info");
+                },
+                error: function (xhr) {
+                    console.log("Lỗi tonkho:", xhr);
+                    hienThiThongBao("Không tải được danh sách tồn kho.", "danger");
+                }
+            });
+        }
+
+        function renderBangSanPham(data) {
+            let html = "";
+
+            if (!data || data.length === 0) {
+                html = `
+                    <tr>
+                        <td colspan="10" class="text-center text-muted py-4">
+                            Không có dữ liệu sản phẩm.
+                        </td>
+                    </tr>
+                `;
+            } else {
+                $.each(data, function (index, item) {
+                    const maSP = item.MaSP ?? "";
+                    const tenSP = escapeHtml(item.TenSP ?? "");
+                    const maCL = item.MaCL ?? "";
+                    const tenCL = escapeHtml(item.TenCL ?? "");
+                    const moTa = escapeHtml(item.MoTa ?? "");
+                    const giaNhap = item.GiaNhap ?? 0;
+                    const giaBan = item.GiaBan ?? 0;
+                    const soLuong = item.SoLuong ?? 0;
+
+                    html += `
+                        <tr>
+                            <td>${maSP}</td>
+                            <td>${tenSP}</td>
+                            <td>${maCL}</td>
+                            <td>${tenCL}</td>
+                            <td>${moTa}</td>
+                            <td class="text-end">${formatNumber(giaNhap)}</td>
+                            <td class="text-end">${formatNumber(giaBan)}</td>
+                            <td class="text-center">${soLuong}</td>
+                            <td class="text-center">
+                                <button type="button"
+                                        class="btn btn-warning btn-sm text-white btn-sua"
+                                        data-masp="${escapeAttr(maSP)}"
+                                        data-tensp="${escapeAttr(item.TenSP ?? "")}"
+                                        data-macl="${escapeAttr(maCL)}"
+                                        data-mota="${escapeAttr(item.MoTa ?? "")}"
+                                        data-gianhap="${escapeAttr(giaNhap)}"
+                                        data-giaban="${escapeAttr(giaBan)}"
+                                        data-soluong="${escapeAttr(soLuong)}">
+                                    Sửa
+                                </button>
+                            </td>
+                            <td class="text-center">
+                                <button type="button"
+                                        class="btn btn-danger btn-sm btn-xoa"
+                                        data-masp="${escapeAttr(maSP)}">
+                                    Xóa
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+
+            $("#dsSanPham").html(html);
+            $("#tongSanPham").text(data ? data.length : 0);
+
+            $(".btn-sua").off("click").on("click", function () {
+                $("#MaSP").val($(this).data("masp")).prop("readonly", true);
+                $("#TenSP").val($(this).data("tensp"));
+                $("#MaCL").val($(this).data("macl"));
+                $("#MoTa").val($(this).data("mota"));
+                $("#GiaNhap").val($(this).data("gianhap"));
+                $("#GiaBan").val($(this).data("giaban"));
+                $("#SoLuong").val($(this).data("soluong"));
+
+                hienThiThongBao("Đã nạp dữ liệu lên form để chỉnh sửa.", "warning");
+            });
+
+            $(".btn-xoa").off("click").on("click", function () {
+                const maSP = $(this).data("masp");
+                xoaSanPham(maSP);
+            });
+        }
+
+        function themSanPham() {
+            anThongBao();
+
+            let sanPham = layDuLieuTuForm(true);
+            if (!sanPham) return;
+
+            $.ajax({
+                url: apiUrl + "/add",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(sanPham),
+                success: function (res) {
+                    hienThiThongBao(res.mess || "Thêm sản phẩm thành công.", "success");
+                    lamMoiForm();
+                    taiTatCaSanPham();
+                },
+                error: function (xhr) {
+                    console.log("Lỗi add:", xhr);
+                    hienThiThongBao(layThongDiepLoi(xhr, "Thêm sản phẩm thất bại."), "danger");
+                }
+            });
+        }
+
+        function capNhatSanPham() {
+            anThongBao();
+
+            let maSP = $("#MaSP").val().trim();
+            if (maSP === "") {
+                hienThiThongBao("Vui lòng chọn sản phẩm cần sửa.", "warning");
+                return;
+            }
+
+            let sanPham = layDuLieuTuForm(false);
+            if (!sanPham) return;
+
+            $.ajax({
+                url: apiUrl + "/update/" + encodeURIComponent(maSP),
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(sanPham),
+                success: function (res) {
+                    hienThiThongBao(res.mess || "Cập nhật sản phẩm thành công.", "success");
+                    lamMoiForm();
+                    taiTatCaSanPham();
+                },
+                error: function (xhr) {
+                    console.log("Lỗi update:", xhr);
+                    hienThiThongBao(layThongDiepLoi(xhr, "Cập nhật sản phẩm thất bại."), "danger");
+                }
+            });
+        }
+
+        function xoaSanPham(maSP) {
+            if (!maSP) {
+                hienThiThongBao("Không xác định được mã sản phẩm để xóa.", "warning");
+                return;
+            }
+
+            if (!confirm("Bạn có chắc muốn xóa sản phẩm này không?")) {
+                return;
+            }
+
+            $.ajax({
+                url: apiUrl + "/delete/" + encodeURIComponent(maSP),
+                type: "DELETE",
+                success: function (res) {
+                    hienThiThongBao(res.mess || "Xóa sản phẩm thành công.", "success");
+                    lamMoiForm();
+                    taiTatCaSanPham();
+                },
+                error: function (xhr) {
+                    console.log("Lỗi delete:", xhr);
+                    hienThiThongBao(layThongDiepLoi(xhr, "Xóa sản phẩm thất bại."), "danger");
+                }
+            });
+        }
+
+        function layDuLieuTuForm(baoGomMaSP) {
+            let maSP = $("#MaSP").val().trim();
+            let tenSP = $("#TenSP").val().trim();
+            let maCL = $("#MaCL").val().trim();
+            let moTa = $("#MoTa").val().trim();
+            let giaNhap = $("#GiaNhap").val().trim();
+            let giaBan = $("#GiaBan").val().trim();
+            let soLuong = $("#SoLuong").val().trim();
+
+            if (baoGomMaSP && maSP === "") {
+                hienThiThongBao("Mã sản phẩm không được để trống.", "warning");
+                return null;
+            }
+
+            if (tenSP === "" || maCL === "" || giaNhap === "" || giaBan === "" || soLuong === "") {
+                hienThiThongBao("Vui lòng nhập đầy đủ các trường bắt buộc.", "warning");
+                return null;
+            }
+
+            let data = {
+                TenSP: tenSP,
+                MaCL: maCL,
+                MoTa: moTa,
+                GiaNhap: parseFloat(giaNhap),
+                GiaBan: parseFloat(giaBan),
+                SoLuong: parseInt(soLuong)
+            };
+
+            if (baoGomMaSP) {
+                data.MaSP = maSP;
+            }
+
+            return data;
+        }
+
+        function lamMoiForm() {
+            $("#MaSP").val("").prop("readonly", false);
+            $("#TenSP").val("");
+            $("#MaCL").val("");
+            $("#MoTa").val("");
+            $("#GiaNhap").val("");
+            $("#GiaBan").val("");
+            $("#SoLuong").val("");
+            anThongBao();
+        }
+
+        function xuatDanhSachTonKho() {
+            $.ajax({
+                url: apiUrl + "/tonkho",
+                type: "GET",
+                success: function (data) {
+                    if (!data || data.length === 0) {
+                        hienThiThongBao("Không có dữ liệu tồn kho để xuất.", "warning");
+                        return;
+                    }
+
+                    let csv = "MaSP,TenSP,MaCL,TenCL,MoTa,GiaNhap,GiaBan,SoLuong\n";
+
+                    $.each(data, function (index, item) {
+                        csv += [
+                            csvSafe(item.MaSP),
+                            csvSafe(item.TenSP),
+                            csvSafe(item.MaCL),
+                            csvSafe(item.TenCL),
+                            csvSafe(item.MoTa),
+                            csvSafe(item.GiaNhap),
+                            csvSafe(item.GiaBan),
+                            csvSafe(item.SoLuong)
+                        ].join(",") + "\n";
+                    });
+
+                    let blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+                    let link = document.createElement("a");
+                    let url = URL.createObjectURL(blob);
+
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", "danh_sach_ton_kho.csv");
+                    link.style.visibility = "hidden";
+
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    hienThiThongBao("Xuất danh sách tồn kho thành công.", "success");
+                },
+                error: function (xhr) {
+                    console.log("Lỗi xuất CSV:", xhr);
+                    hienThiThongBao("Xuất danh sách tồn kho thất bại.", "danger");
+                }
+            });
+        }
+
+        function csvSafe(value) {
+            if (value === null || value === undefined) return '""';
+            return '"' + String(value).replace(/"/g, '""') + '"';
+        }
+
+        function formatNumber(value) {
+            if (value === null || value === undefined || value === "") return "0";
+            return Number(value).toLocaleString("vi-VN");
+        }
+
+        function layThongDiepLoi(xhr, macDinh) {
+            try {
+                if (xhr.responseJSON) {
+                    return xhr.responseJSON.mess || xhr.responseJSON.error || macDinh;
+                }
+                return macDinh;
+            } catch {
+                return macDinh;
+            }
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function escapeAttr(value) {
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+    </script>
+}

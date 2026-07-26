@@ -1,0 +1,216 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+:root {
+  --mimo-primary: #48a111;
+  --mimo-primary-dark: #2f7d0c;
+  --mimo-primary-soft: rgba(72, 161, 17, 0.12);
+  --mimo-surface: rgba(255, 255, 255, 0.9);
+  --mimo-border: rgba(72, 161, 17, 0.14);
+  --mimo-shadow: 0 12px 30px rgba(67, 89, 113, 0.08);
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #f7fbf4 0%, #f9fcf7 100%);
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem rgba(72, 161, 17, 0.25);
+}
+
+.mimo-layout-body .layout-page {
+  min-height: 100vh;
+}
+
+.mimo-main-shell {
+  padding-top: 1.25rem;
+  padding-bottom: 2rem;
+}
+
+.mimo-topbar-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  padding: 1rem 0 0;
+  backdrop-filter: blur(10px);
+}
+
+.mimo-topbar {
+  background: var(--mimo-surface);
+  border: 1px solid var(--mimo-border);
+  box-shadow: var(--mimo-shadow);
+  border-radius: 24px;
+  padding: 0.9rem 1.15rem;
+}
+
+.mimo-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: #48624c;
+  font-weight: 700;
+}
+
+.mimo-brand:hover {
+  color: var(--mimo-primary);
+}
+
+.mimo-brand-mark {
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--mimo-primary-dark) 0%, var(--mimo-primary) 58%, #8fd96a 100%);
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(47, 125, 12, 0.22);
+}
+
+.mimo-brand-text {
+  font-size: 1.4rem;
+  letter-spacing: -0.02em;
+}
+
+.mimo-nav-list {
+  gap: 0.35rem;
+}
+
+.mimo-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.72rem 1rem !important;
+  border-radius: 999px;
+  color: #667a67;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.mimo-nav-link:hover,
+.mimo-nav-link.active {
+  background: var(--mimo-primary-soft);
+  color: var(--mimo-primary-dark);
+}
+
+.mimo-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.mimo-lang-switch {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: rgba(72, 161, 17, 0.08);
+  border: 1px solid rgba(72, 161, 17, 0.12);
+}
+
+.mimo-lang-option {
+  min-width: 44px;
+  text-align: center;
+  padding: 0.42rem 0.8rem;
+  border-radius: 999px;
+  color: #6f816e;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.mimo-lang-option:hover {
+  color: var(--mimo-primary-dark);
+}
+
+.mimo-lang-option.active {
+  background: #fff;
+  color: var(--mimo-primary-dark);
+  box-shadow: 0 8px 16px rgba(72, 161, 17, 0.16);
+}
+
+.mimo-user-dropdown {
+  min-width: 240px;
+  border-radius: 18px;
+  border: 1px solid rgba(72, 161, 17, 0.12);
+  box-shadow: 0 16px 36px rgba(67, 89, 113, 0.12);
+}
+
+.layout-navbar-fixed .layout-wrapper:not(.layout-without-menu) .layout-page,
+.layout-menu-fixed .layout-wrapper:not(.layout-without-menu) .layout-page {
+  padding-top: 0 !important;
+}
+
+.card,
+.content-wrapper > .container-xxl > .card,
+.container-xxl > .row > [class*='col-'] > .card {
+  border: 1px solid rgba(72, 161, 17, 0.08);
+  box-shadow: 0 10px 30px rgba(67, 89, 113, 0.06);
+}
+
+.btn-primary {
+  background-color: var(--mimo-primary) !important;
+  border-color: var(--mimo-primary) !important;
+}
+
+.btn-outline-primary {
+  color: var(--mimo-primary-dark) !important;
+  border-color: rgba(72, 161, 17, 0.28) !important;
+}
+
+.btn-outline-primary:hover {
+  background: rgba(72, 161, 17, 0.08) !important;
+  color: var(--mimo-primary-dark) !important;
+}
+
+.text-primary,
+a,
+.nav-link,
+.menu-link {
+  color: inherit;
+}
+
+@media (max-width: 991.98px) {
+  .mimo-topbar-wrap {
+    padding-top: 0.75rem;
+  }
+
+  .mimo-topbar {
+    border-radius: 20px;
+  }
+
+  .mimo-nav-list {
+    margin: 1rem 0;
+    gap: 0.5rem;
+  }
+
+  .mimo-nav-link {
+    width: 100%;
+    justify-content: flex-start;
+    border-radius: 16px;
+  }
+
+  .mimo-topbar-actions {
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+  }
+}

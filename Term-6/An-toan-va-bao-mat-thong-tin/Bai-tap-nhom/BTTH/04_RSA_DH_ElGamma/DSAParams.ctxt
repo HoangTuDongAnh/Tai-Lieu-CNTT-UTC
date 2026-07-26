@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=DSAParams
+comment1.params=hM\ p\ q\ h\ xA\ k
+comment1.target=DSAParams(long,\ long,\ long,\ long,\ long,\ long)
+comment2.params=
+comment2.target=long\ getHM()
+comment3.params=
+comment3.target=long\ getP()
+comment4.params=
+comment4.target=long\ getQ()
+comment5.params=
+comment5.target=long\ getH()
+comment6.params=
+comment6.target=long\ getXA()
+comment7.params=
+comment7.target=long\ getK()
+numComments=8

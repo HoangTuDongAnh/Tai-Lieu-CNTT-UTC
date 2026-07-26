@@ -303,23 +303,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     break;
 
-    case WM_RBUTTONUP:
-    {
-        POINT pt;
-        GetCursorPos(&pt);
+    //case WM_RBUTTONUP:
+    //{
+    //    POINT pt;
+    //    GetCursorPos(&pt);
 
-        HMENU hMenu = LoadMenu(hInst, MAKEINTRESOURCE(IDR_MENU2));
-        if (hMenu)
-        {
-            HMENU hPopup = GetSubMenu(hMenu, 0);
-            if (hPopup)
-            {
-                TrackPopupMenu(hPopup, TPM_RIGHTBUTTON, pt.x, pt.y, 0, hWnd, NULL);
-            }
-            DestroyMenu(hMenu);
-        }
-    }
-    break;
+    //    HMENU hMenu = LoadMenu(hInst, MAKEINTRESOURCE(IDR_MENU2));
+    //    if (hMenu)
+    //    {
+    //        HMENU hPopup = GetSubMenu(hMenu, 0);
+    //        if (hPopup)
+    //        {
+    //            TrackPopupMenu(hPopup, TPM_RIGHTBUTTON, pt.x, pt.y, 0, hWnd, NULL);
+    //        }
+    //        DestroyMenu(hMenu);
+    //    }
+    //}
+    //break;
 
     case WM_MOUSEMOVE:
     {
@@ -375,11 +375,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             DeleteObject(hBrush);
         }
 
-        int minutes = remainingSeconds / 60;
-        int seconds = remainingSeconds % 60;
+        //int minutes = remainingSeconds / 60;
+        //int seconds = remainingSeconds % 60;
 
-        WCHAR timeText[20];
-        wsprintf(timeText, L"%02d:%02d", minutes, seconds);
+        //WCHAR timeText[20];
+        //wsprintf(timeText, L"%02d:%02d", minutes, seconds);
 
         RECT rc;
         GetClientRect(hWnd, &rc);
@@ -387,12 +387,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         rc.bottom -= 10;
 
         SetBkMode(hdc, TRANSPARENT);
-        DrawText(hdc, timeText, -1, &rc, DT_RIGHT | DT_BOTTOM | DT_SINGLELINE);
+        //DrawText(hdc, timeText, -1, &rc, DT_RIGHT | DT_BOTTOM | DT_SINGLELINE);
 
         EndPaint(hWnd, &ps);
     }
     break;
-    case WM_TIMER:
+    /*case WM_TIMER:
     {
         if (wParam == timerID)
         {
@@ -406,7 +406,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 KillTimer(hWnd, timerID);
             }
         }
-    }
+    }*/
     break;
 
     case WM_DESTROY:

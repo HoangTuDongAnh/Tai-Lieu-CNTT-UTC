@@ -1,0 +1,108 @@
+@{
+    var lang = (ViewBag.Lang as string ?? "vi").ToLower();
+    string T(string vi, string en) => lang == "en" ? en : vi;
+
+    var userFullName = Context.Session.GetString("UserFullName") ?? "Admin";
+    var userEmail = Context.Session.GetString("UserEmail") ?? "admin@example.com";
+
+    var userAvatar = Context.Session.GetString("UserAvatar");
+    if (string.IsNullOrWhiteSpace(userAvatar))
+    {
+        userAvatar = Url.Content("~/sneat/img/avatars/1.png");
+    }
+
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "Admin";
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "Index";
+
+    var currentPath = Context.Request.Path.Value ?? "/";
+    var query = new Dictionary<string, string?>();
+    foreach (var item in Context.Request.Query) { query[item.Key] = item.Value.ToString(); }
+
+    string BuildLangUrl(string targetLang)
+    {
+        query["lang"] = targetLang;
+        var queryString = string.Join("&", query.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value ?? "")}"));
+        return string.IsNullOrWhiteSpace(queryString) ? currentPath : $"{currentPath}?{queryString}";
+    }
+}
+
+<header class="mimo-topbar-wrap">
+    <nav class="container-xxl navbar navbar-expand-lg mimo-topbar" id="layout-navbar">
+        <a class="navbar-brand mimo-brand me-4" asp-controller="Admin" asp-action="Index" asp-route-lang="@lang">
+            <span class="mimo-brand-mark" aria-hidden="true">A</span>
+            <span class="mimo-brand-text">Expense Admin</span>
+        </a>
+
+        <button class="navbar-toggler border-0 shadow-none px-0" type="button"
+                data-bs-toggle="collapse" data-bs-target="#mimoNavbar"
+                aria-controls="mimoNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bx bx-menu fs-2 text-primary"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mimoNavbar">
+            <ul class="navbar-nav mx-auto mimo-nav-list">
+                <li class="nav-item">
+                    <a class="nav-link mimo-nav-link @(currentController == "Admin" && currentAction == "Index" ? "active" : "")"
+                       asp-controller="Admin" asp-action="Index" asp-route-lang="@lang">
+                        <i class="bx bx-home-circle"></i>
+                        <span>@T("Tổng quan Admin", "Admin Dashboard")</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mimo-nav-link @(currentController == "Admin" && currentAction == "ErrorReports" ? "active" : "")"
+                       asp-controller="Admin" asp-action="ErrorReports" asp-route-lang="@lang">
+                        <i class="bx bx-error-alt"></i>
+                        <span>@T("Báo lỗi", "Error Reports")</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="mimo-topbar-actions ms-lg-3">
+                <div class="mimo-lang-switch" role="group" aria-label="Language switch">
+                    <a href="@BuildLangUrl("vi")" class="mimo-lang-option @(lang == "vi" ? "active" : "")">VI</a>
+                    <a href="@BuildLangUrl("en")" class="mimo-lang-option @(lang == "en" ? "active" : "")">EN</a>
+                </div>
+
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle hide-arrow p-0 d-flex align-items-center gap-2"
+                       href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="avatar avatar-online">
+                            <img src="@userAvatar" alt="avatar" class="w-px-40 h-px-40 rounded-circle" style="object-fit: cover;" />
+                        </div>
+                        <div class="d-none d-lg-flex flex-column text-start lh-sm">
+                            <strong class="text-heading">@userFullName</strong>
+                            <small class="text-body-secondary">@T("Quản trị viên", "Administrator")</small>
+                        </div>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end mimo-user-dropdown">
+                        <li>
+                            <div class="dropdown-item-text">
+                                <div class="fw-semibold">@userFullName</div>
+                                <small class="text-body-secondary">@userEmail</small>
+                            </div>
+                        </li>
+                        <li><div class="dropdown-divider my-1"></div></li>
+
+                        <li>
+                            <a class="dropdown-item" asp-controller="Admin" asp-action="Profile" asp-route-lang="@lang">
+                                <i class="bx bx-user icon-md me-3"></i>
+                                <span>@T("Hồ sơ cá nhân", "My Profile")</span>
+                            </a>
+                        </li>
+                        <li><div class="dropdown-divider my-1"></div></li>
+                        <li>
+                            <form asp-controller="Auth" asp-action="Logout" asp-route-lang="@lang" method="post" class="m-0">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="dropdown-item border-0 bg-transparent w-100 text-start">
+                                    <i class="bx bx-power-off icon-md me-3"></i>
+                                    <span>@T("Đăng xuất", "Log Out")</span>
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

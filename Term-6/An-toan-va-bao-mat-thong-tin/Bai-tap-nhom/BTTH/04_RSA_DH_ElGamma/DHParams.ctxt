@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=DHParams
+comment1.params=q\ a\ xA\ xB
+comment1.target=DHParams(long,\ long,\ long,\ long)
+comment2.params=
+comment2.target=long\ getQ()
+comment3.params=
+comment3.target=long\ getA()
+comment4.params=
+comment4.target=long\ getXA()
+comment5.params=
+comment5.target=long\ getXB()
+numComments=6

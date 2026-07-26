@@ -1,9 +1,0 @@
-#BlueJ class context
-comment0.target=EuclidMoRong
-comment1.params=a\ n
-comment1.target=long\ mod(long,\ long)
-comment2.params=a\ n
-comment2.target=java.lang.Long\ modInverse(long,\ long)
-comment3.params=args
-comment3.target=void\ main(java.lang.String[])
-numComments=4

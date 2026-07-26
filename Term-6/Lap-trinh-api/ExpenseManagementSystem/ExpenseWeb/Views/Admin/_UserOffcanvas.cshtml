@@ -1,0 +1,68 @@
+@{
+    var lang = (Context.Request.Query["lang"].FirstOrDefault() ?? ViewBag.Lang as string ?? "vi").ToLower();
+    string T(string vi, string en) => lang == "en" ? en : vi;
+}
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasUserDetails" aria-labelledby="offcanvasUserDetailsLabel">
+    <div class="offcanvas-header border-bottom">
+        <h5 id="offcanvasUserDetailsLabel" class="offcanvas-title">@T("Chi tiết tài khoản", "User Details")</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body flex-grow-1">
+        <div class="text-center mb-4">
+            <img src="~/sneat/img/avatars/1.png" alt="User Avatar" class="rounded-circle mb-3 border shadow-sm" width="100" height="100" style="object-fit: cover;">
+            <h4 class="mb-1 text-primary fw-bold">Hoang Mai</h4>
+            <span class="badge bg-label-info text-capitalize">@T("Người dùng", "User")</span>
+        </div>
+
+        <hr>
+
+        <h6 class="text-primary text-uppercase mb-3 fw-bold">@T("Thông tin chung", "About")</h6>
+        <ul class="list-unstyled mb-4 mt-3">
+            <li class="d-flex align-items-center mb-3 p-2 bg-lighter rounded">
+                <i class="bx bx-id-card text-primary fs-5 me-2"></i>
+                <span class="fw-medium me-2">@T("Mã số:", "User ID:")</span>
+                <span class="text-dark">U2604050002</span>
+            </li>
+            <li class="d-flex align-items-center mb-3 p-2 bg-lighter rounded">
+                <i class="bx bx-envelope text-primary fs-5 me-2"></i>
+                <span class="fw-medium me-2">@T("Email:", "Email:")</span>
+                <span class="text-dark">hoangmai.test@example.com</span>
+            </li>
+            <li class="d-flex align-items-center mb-3 p-2 bg-lighter rounded">
+                <i class="bx bx-phone text-primary fs-5 me-2"></i>
+                <span class="fw-medium me-2">@T("SĐT:", "Phone:")</span>
+                <span class="text-muted fst-italic">@T("Chưa cập nhật", "Not updated")</span>
+            </li>
+            <li class="d-flex align-items-center mb-3 p-2 bg-lighter rounded">
+                <i class="bx bx-check-shield text-primary fs-5 me-2"></i>
+                <span class="fw-medium me-2">@T("Trạng thái:", "Status:")</span>
+                <span class="badge bg-label-success text-capitalize">@T("Hoạt động", "Active")</span>
+            </li>
+        </ul>
+
+        <h6 class="text-primary text-uppercase mb-3 fw-bold">@T("Dữ liệu hệ thống", "System")</h6>
+        <ul class="list-unstyled mb-4 mt-3">
+            <li class="d-flex align-items-center mb-3 p-2 border rounded">
+                <i class="bx bx-calendar-plus text-secondary fs-5 me-2"></i>
+                <span class="fw-medium me-2">@T("Ngày tạo:", "Created At:")</span>
+                <span class="text-muted">2026-04-05 16:21</span>
+            </li>
+            <li class="d-flex align-items-center mb-3 p-2 border rounded">
+                <i class="bx bx-time-five text-secondary fs-5 me-2"></i>
+                <span class="fw-medium me-2">@T("Cập nhật:", "Updated At:")</span>
+                <span class="text-muted">2026-04-05 16:21</span>
+            </li>
+        </ul>
+
+        <div class="d-flex justify-content-center w-100 mt-5 gap-3">
+            <button class="btn btn-primary flex-grow-1" data-bs-dismiss="offcanvas">
+                <i class="bx bx-edit-alt me-1"></i> @T("Sửa", "Edit")
+            </button>
+            <button class="btn btn-outline-danger flex-grow-1" data-bs-dismiss="offcanvas">
+                <i class="bx bx-block me-1"></i> @T("Đình chỉ", "Suspend")
+            </button>
+        </div>
+    </div>
+</div>

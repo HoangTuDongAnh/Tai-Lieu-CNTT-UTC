@@ -1,0 +1,45 @@
+@{
+    var lang = (Context.Request.Query["lang"].FirstOrDefault() ?? "vi").ToLower();
+    if (lang != "en") lang = "vi";
+
+    ViewBag.Lang = lang;
+    var title = ViewBag.Title ?? "Mimo";
+    var authPageClass = ViewBag.AuthPageClass ?? "";
+}
+<!doctype html>
+<html lang="@lang">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+    <title>@title</title>
+    <meta name="description" content="Mimo - Hệ thống quản lý chi tiêu cá nhân" />
+    <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/sneat/vendor/fonts/iconify-icons.css" />
+    <link rel="stylesheet" href="~/sneat/vendor/css/core.css" />
+    <link rel="stylesheet" href="~/css/app.auth.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/app.components.css" asp-append-version="true" />
+
+    @RenderSection("Styles", required: false)
+</head>
+<body class="auth-modern-body @authPageClass">
+    @RenderBody()
+    <div id="appToastStack" class="app-toast-stack" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="~/sneat/vendor/libs/jquery/jquery.js"></script>
+    <script src="~/sneat/vendor/libs/popper/popper.js"></script>
+    <script src="~/sneat/vendor/js/bootstrap.js"></script>
+    <script src="~/js/app.js" asp-append-version="true"></script>
+    <script src="~/js/app.ui.js" asp-append-version="true"></script>
+    <script src="~/js/app.forms.js" asp-append-version="true"></script>
+    <script src="~/js/app.auth.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

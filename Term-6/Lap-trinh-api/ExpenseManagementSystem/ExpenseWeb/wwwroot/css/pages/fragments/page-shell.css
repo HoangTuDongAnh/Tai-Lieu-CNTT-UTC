@@ -1,0 +1,164 @@
+.page-shell-hero {
+    background: linear-gradient(135deg, rgba(72, 161, 17, 0.08) 0%, rgba(72, 161, 17, 0.14) 100%);
+    border-radius: 30px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.page-shell-hero__copy {
+    background: rgba(255,255,255,0.84);
+    border-radius: 24px;
+    padding: 1.4rem 1.6rem;
+    border: 1px solid rgba(72,161,17,0.08);
+}
+
+.page-shell-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(72, 161, 17, 0.12);
+    color: #4a8c24;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.page-shell-hero__title {
+    margin: 0;
+    max-width: 22ch;
+    font-size: clamp(2.4rem, 4vw, 4.35rem);
+    line-height: 1.05;
+    font-weight: 800;
+    color: #243627;
+    letter-spacing: -0.03em;
+}
+
+.page-shell-hero__text {
+    margin: 1rem 0 0;
+    max-width: 62rem;
+    color: #6e7f6f;
+    font-size: 1rem;
+}
+
+.page-shell-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.page-shell-card {
+    border-radius: 28px;
+    border: 1px solid rgba(72, 161, 17, 0.08);
+    box-shadow: 0 14px 36px rgba(67, 89, 113, 0.05);
+    overflow: hidden;
+}
+
+.page-shell-card > .card-header {
+    padding: 1.25rem 1.35rem 0;
+    background: transparent;
+    border: 0;
+}
+
+.page-shell-card > .card-body {
+    padding: 1rem 1.35rem 1.35rem;
+}
+
+.page-shell-card .page-shell-section-title {
+    margin: 0;
+    color: #2f4331;
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.page-shell-card .page-shell-section-text {
+    margin: 0.35rem 0 0;
+    color: #7b897a;
+}
+
+.profile-overview-grid {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.profile-panel {
+    background: linear-gradient(180deg, rgba(72,161,17,0.06), rgba(72,161,17,0.02));
+    border: 1px solid rgba(72,161,17,0.10);
+    border-radius: 24px;
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.profile-panel__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 999px;
+    background: rgba(72,161,17,0.10);
+    color: #4a8c24;
+    padding: 0.45rem 0.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.profile-panel__helper {
+    color: #7b897a;
+    font-size: 0.95rem;
+    margin: 0.9rem auto 1.1rem;
+    max-width: 28ch;
+}
+
+.profile-form-shell {
+    border-left: 1px dashed #d9e1d0;
+    padding-left: 2rem;
+}
+
+.profile-danger-card .card-header {
+    padding-top: 1.25rem;
+}
+
+.support-form-card .card-header,
+.support-history-card .card-header {
+    padding-top: 1.25rem;
+}
+
+.support-history-card .report-expense-item {
+    transition: background 0.2s ease;
+}
+
+.support-history-card .report-expense-item:hover {
+    background: rgba(72, 161, 17, 0.04);
+}
+
+.support-history-card .bg-lighter {
+    background: rgba(72,161,17,0.04) !important;
+}
+
+@media (max-width: 991.98px) {
+    .profile-overview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-form-shell {
+        border-left: 0;
+        border-top: 1px dashed #d9e1d0;
+        padding-left: 0;
+        padding-top: 1.5rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .page-shell-hero {
+        padding: 0.9rem;
+    }
+
+    .page-shell-hero__copy {
+        padding: 1.1rem 1.15rem;
+    }
+
+    .page-shell-hero__title {
+        font-size: clamp(2rem, 9vw, 3rem);
+        max-width: none;
+    }
+}

@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=AESAlgorithm
+comment1.params=
+comment1.target=AESAlgorithm()
+comment2.params=state
+comment2.target=int[][]\ subBytes(int[][])
+comment3.params=state
+comment3.target=int[][]\ shiftRows(int[][])
+comment4.params=state
+comment4.target=int[][]\ mixColumns(int[][])
+comment5.params=state\ roundKey
+comment5.target=int[][]\ addRoundKey(int[][],\ int[][])
+comment6.params=plainHex\ keyHex
+comment6.target=java.lang.String\ encryptHex(java.lang.String,\ java.lang.String)
+comment7.params=keyHex
+comment7.target=int[]\ expandKeyHex(java.lang.String)
+comment8.params=expanded\ round
+comment8.target=int[][]\ getRoundKeyStateFromExpanded(int[],\ int)
+numComments=9

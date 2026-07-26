@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=RSAService
+comment1.params=
+comment1.target=RSAService()
+comment2.params=p\ q\ e
+comment2.target=RSAKeyPair\ taoKhoa(long,\ long,\ long)
+comment3.params=M\ keyPair
+comment3.target=long\ maHoaBaoMat(long,\ RSAKeyPair)
+comment4.params=C\ keyPair
+comment4.target=long\ giaiMaBaoMat(long,\ RSAKeyPair)
+comment5.params=M\ keyPair
+comment5.target=long\ kySo(long,\ RSAKeyPair)
+comment6.params=C\ keyPair
+comment6.target=long\ xacMinhChuKy(long,\ RSAKeyPair)
+numComments=7

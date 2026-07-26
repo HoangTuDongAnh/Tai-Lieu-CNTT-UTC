@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=NghichDaoModuloService
+comment1.params=
+comment1.target=NghichDaoModuloService()
+comment2.params=a\ n
+comment2.target=java.lang.Long\ timTheoDinhNghia(long,\ long)
+comment3.params=a\ n
+comment3.target=java.lang.Long\ timTheoEuclidMoRong(long,\ long)
+numComments=4

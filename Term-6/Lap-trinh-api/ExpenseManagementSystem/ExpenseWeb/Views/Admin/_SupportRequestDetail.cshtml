@@ -1,0 +1,156 @@
+@model ExpenseWeb.Models.ViewModels.Admin.AdminSupportRequestDetailViewModel
+@{
+    var lang = (Context.Request.Query["lang"].FirstOrDefault() ?? ViewBag.Lang as string ?? "vi").ToLower();
+    string T(string vi, string en) => lang == "en" ? en : vi;
+
+    string StatusBadgeClass(string status) => status switch
+    {
+        "pending" => "bg-label-primary",
+        "viewed" => "bg-label-warning",
+        "replied" => "bg-label-success",
+        "closed" => "bg-label-secondary",
+        _ => "bg-label-secondary"
+    };
+
+    string PriorityBadgeClass(string priority) => priority switch
+    {
+        "low" => "bg-label-secondary",
+        "medium" => "bg-label-info",
+        "high" => "bg-label-warning",
+        "urgent" => "bg-label-danger",
+        _ => "bg-label-secondary"
+    };
+}
+
+<div class="support-detail-layout admin-detail-layout">
+    <section class="support-detail-card admin-detail-main-card">
+        <div class="admin-detail-user-header">
+            @if (!string.IsNullOrWhiteSpace(Model.UserAvatar))
+            {
+                <img src="@Model.UserAvatar" alt="avatar" class="admin-detail-avatar" />
+            }
+            else
+            {
+                <div class="admin-detail-avatar admin-detail-avatar--fallback">@(Model.UserFullName?.Length > 0 ? Model.UserFullName[0].ToString().ToUpper() : "?")</div>
+            }
+            <div class="admin-detail-user-copy">
+                <strong>@Model.UserFullName</strong>
+                <span>@Model.UserEmail</span>
+            </div>
+        </div>
+
+        <div class="support-detail-section-head">
+            <span class="badge bg-label-secondary font-monospace">@Model.SupportRequestId</span>
+            <span class="badge @StatusBadgeClass(Model.Status)">@Model.StatusLabel</span>
+            <span class="badge @PriorityBadgeClass(Model.Priority)">@Model.PriorityLabel</span>
+            <span class="badge bg-label-info">@Model.SupportTypeLabel</span>
+        </div>
+
+        <div class="support-detail-block">
+            <label>@T("Tiêu đề", "Subject")</label>
+            <div class="support-detail-value strong">@Model.Subject</div>
+        </div>
+
+        <div class="support-detail-block">
+            <label>@T("Nội dung hỗ trợ", "Support message")</label>
+            <div class="support-detail-message">@Model.Message</div>
+        </div>
+
+        <div class="support-detail-block">
+            <label>@T("Tệp đính kèm", "Attachments")</label>
+            @if (Model.Attachments.Count > 0)
+            {
+                <div class="admin-support-attachment-grid" data-admin-lightbox-scope>
+                    @foreach (var attachment in Model.Attachments)
+                    {
+                        var kind = attachment.IsImage ? "image" : attachment.IsVideo ? "video" : attachment.IsPdf ? "pdf" : attachment.IsDocument ? "doc" : "file";
+                        <button type="button"
+                                class="admin-support-attachment-card"
+                                data-lightbox-trigger
+                                data-lightbox-type="@kind"
+                                data-lightbox-src="@attachment.FileUrl"
+                                data-lightbox-name="@attachment.FileName"
+                                data-lightbox-filetype="@attachment.FileType">
+                            @if (attachment.IsImage)
+                            {
+                                <img src="@attachment.FileUrl" alt="@attachment.FileName" class="admin-support-attachment-thumb" />
+                            }
+                            else if (attachment.IsVideo)
+                            {
+                                <div class="admin-support-attachment-thumb admin-support-attachment-thumb--icon"><i class="bx bx-video"></i><span>VIDEO</span></div>
+                            }
+                            else if (attachment.IsPdf)
+                            {
+                                <div class="admin-support-attachment-thumb admin-support-attachment-thumb--icon"><i class="bx bx-file-blank"></i><span>PDF</span></div>
+                            }
+                            else if (attachment.IsDocument)
+                            {
+                                <div class="admin-support-attachment-thumb admin-support-attachment-thumb--icon"><i class="bx bx-file-doc"></i><span>DOC</span></div>
+                            }
+                            else
+                            {
+                                <div class="admin-support-attachment-thumb admin-support-attachment-thumb--icon"><i class="bx bx-file"></i></div>
+                            }
+                            <span class="admin-support-attachment-name">@attachment.FileName</span>
+                            <span class="admin-support-attachment-size">@attachment.DisplaySize</span>
+                            <span class="admin-support-attachment-link"><i class="bx bx-fullscreen"></i>@T("Xem toàn màn hình", "Open full screen")</span>
+                        </button>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="support-empty-attachment">@T("Không có tệp đính kèm", "No attachments")</div>
+            }
+        </div>
+    </section>
+
+    <aside class="support-reply-card admin-detail-side-card">
+        <div class="support-detail-block">
+            <label>@T("Thời gian gửi", "Sent at")</label>
+            <div class="support-detail-value strong">@Model.CreatedAt.ToString("HH:mm - dd-MM-yyyy")</div>
+        </div>
+        @if (Model.ViewedAt.HasValue)
+        {
+            <div class="support-detail-block">
+                <label>@T("Thời gian tiếp nhận", "Viewed at")</label>
+                <div class="support-detail-value">@Model.ViewedAt.Value.ToString("HH:mm - dd-MM-yyyy")</div>
+            </div>
+        }
+        @if (Model.RepliedAt.HasValue)
+        {
+            <div class="support-detail-block">
+                <label>@T("Thời gian phản hồi", "Replied at")</label>
+                <div class="support-detail-value">@Model.RepliedAt.Value.ToString("HH:mm - dd-MM-yyyy")</div>
+            </div>
+        }
+        <div class="support-detail-block">
+            <label>@T("Phản hồi từ admin", "Admin reply")</label>
+            <div class="support-admin-reply @(string.IsNullOrWhiteSpace(Model.AdminReply) ? "pending" : string.Empty)">@(string.IsNullOrWhiteSpace(Model.AdminReply) ? T("Chưa có phản hồi nào cho yêu cầu này.", "No reply has been sent for this request yet.") : Model.AdminReply)</div>
+        </div>
+    </aside>
+</div>
+
+<div class="support-detail-card admin-reply-editor-card">
+    @if (Model.Status != "closed")
+    {
+        <div class="fw-semibold mb-2"><i class="bx bx-reply me-2 text-primary"></i>@T("Xử lý phản hồi", "Reply handling")</div>
+        <p class="text-muted mb-3">@T("Cập nhật trạng thái hoặc gửi phản hồi cho người dùng trực tiếp từ popup này.", "Update the status or reply to the user directly from this popup.")</p>
+        <form method="post" asp-action="ReplySupport" asp-controller="Admin">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="supportRequestId" value="@Model.SupportRequestId" />
+            <div class="support-detail-block mb-3">
+                <label>@T("Nội dung phản hồi", "Reply message")</label>
+                <textarea name="adminReply" class="form-control admin-support-reply-input" rows="4" placeholder="@T("Nhập nội dung phản hồi cho người dùng...", "Type your reply for the user...")">@(string.IsNullOrWhiteSpace(Model.AdminReply) ? "" : Model.AdminReply)</textarea>
+            </div>
+            <div class="admin-support-reply-actions">
+                @if (Model.Status == "pending")
+                {
+                    <button type="submit" name="status" value="viewed" class="btn btn-outline-warning"><i class="bx bx-show me-1"></i>@T("Đánh dấu đang xử lý", "Mark processing")</button>
+                }
+                <button type="submit" name="status" value="closed" class="btn btn-outline-secondary"><i class="bx bx-lock-alt me-1"></i>@T("Đóng yêu cầu", "Close request")</button>
+                <button type="submit" name="status" value="replied" class="btn btn-success"><i class="bx bxs-paper-plane me-1"></i>@T("Gửi phản hồi", "Send reply")</button>
+            </div>
+        </form>
+    }
+</div>

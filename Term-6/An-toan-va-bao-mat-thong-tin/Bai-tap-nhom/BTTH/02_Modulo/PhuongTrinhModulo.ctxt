@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=PhuongTrinhModulo
+comment1.params=soDu\ modulo
+comment1.target=PhuongTrinhModulo(long,\ long)
+comment2.params=
+comment2.target=long\ getSoDu()
+comment3.params=
+comment3.target=long\ getModulo()
+numComments=4

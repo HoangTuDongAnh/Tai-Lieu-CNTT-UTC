@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=RSAUtil
+comment1.params=a\ b
+comment1.target=long\ gcd(long,\ long)
+comment2.params=a\ n
+comment2.target=long\ mod(long,\ long)
+comment3.params=a\ m
+comment3.target=long\ modInverse(long,\ long)
+comment4.params=base\ exponent\ mod
+comment4.target=long\ powerMod(long,\ long,\ long)
+comment5.params=n
+comment5.target=boolean\ isPrime(long)
+numComments=6

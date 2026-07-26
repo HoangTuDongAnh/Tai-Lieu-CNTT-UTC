@@ -1,0 +1,428 @@
+﻿@import url('./fragments/core-page-hero.css');
+@import url('./fragments/analytics-overview.css');
+@import url('./fragments/transaction-ledger.css');
+@import url('./fragments/transaction-modals.css');
+
+/* Transaction page adjustments for category type and modal layout */
+.tx-filter-segmented {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+}
+
+.tx-filter-segmented button {
+    white-space: nowrap;
+}
+
+.tx-category-grid-scroll {
+    max-height: 232px;
+    overflow-y: auto;
+    padding-right: 4px;
+    align-content: flex-start;
+}
+
+.tx-category-grid-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tx-category-grid-scroll::-webkit-scrollbar-thumb {
+    background: rgba(105, 108, 255, 0.25);
+    border-radius: 999px;
+}
+
+.tx-preview-note-card {
+    margin-top: 16px;
+}
+
+.tx-preview-note-card textarea {
+    min-height: 96px;
+    resize: vertical;
+}
+
+#addTransactionModal .tx-modal-layout,
+#transactionDetailModal .tx-modal-layout {
+    align-items: flex-start;
+}
+
+#addTransactionModal .tx-modal-preview,
+#transactionDetailModal .tx-modal-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#addTransactionModal .tx-preview-meta-compact,
+#transactionDetailModal .tx-preview-meta-compact {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+#addTransactionModal .tx-preview-meta-compact div,
+#transactionDetailModal .tx-preview-meta-compact div {
+    min-height: 74px;
+}
+
+#addTransactionModal .tx-form-card,
+#transactionDetailModal .tx-form-card {
+    margin-bottom: 16px;
+}
+
+#addTransactionModal .tx-form-card:last-child,
+#transactionDetailModal .tx-form-card:last-child {
+    margin-bottom: 0;
+}
+
+#addTransactionModal .tx-category-chip.d-none,
+#transactionDetailModal .tx-category-chip.d-none {
+    display: none !important;
+}
+
+#addTransactionModal .tx-category-chip[disabled],
+#transactionDetailModal .tx-category-chip[disabled] {
+    pointer-events: none;
+}
+
+@media (max-width: 991.98px) {
+    .tx-filter-segmented {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #addTransactionModal .tx-preview-meta-compact,
+    #transactionDetailModal .tx-preview-meta-compact {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Split transaction type toggles per card */
+.tx-filter-grid-top {
+    grid-template-columns: minmax(220px, .9fr) minmax(220px, .9fr) minmax(240px, .95fr);
+}
+
+.tx-card-toggle-shell {
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+    align-items: flex-end;
+    flex: 0 0 auto;
+}
+
+.tx-card-toggle-shell--inline {
+    align-items: flex-start;
+}
+
+.tx-inline-filter-label {
+    font-size: .8rem;
+    font-weight: 700;
+    color: var(--tx-muted);
+    line-height: 1.2;
+}
+
+.tx-breakdown-head.compact {
+    align-items: flex-start;
+}
+
+.tx-breakdown-head.compact .tx-card-toggle-shell .tx-segmented {
+    width: auto;
+}
+
+.tx-list-title-block {
+    display: flex;
+    flex-direction: column;
+    gap: .85rem;
+    min-width: 0;
+}
+
+.tx-list-title-block h3 {
+    margin: 0;
+}
+
+.tx-list-toolbar {
+    align-items: flex-start;
+}
+
+@media (max-width: 1199.98px) {
+    .tx-filter-grid-top {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767.98px) {
+    .tx-card-toggle-shell,
+    .tx-card-toggle-shell--inline {
+        align-items: stretch;
+    }
+
+    .tx-card-toggle-shell .tx-segmented,
+    .tx-card-toggle-shell--inline .tx-segmented {
+        width: 100%;
+    }
+}
+
+
+/* Transaction breakdown legend sizing + hover polish */
+.tx-breakdown-head.compact {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 1.5rem;
+    row-gap: .75rem;
+    align-items: start;
+    margin-bottom: 1.35rem;
+}
+
+.tx-breakdown-head.compact > div:first-child {
+    min-width: 0;
+}
+
+.tx-breakdown-title {
+    margin-bottom: 0;
+}
+
+.tx-breakdown-text {
+    width: min(100%, 680px);
+    max-width: none;
+    margin-top: .45rem;
+    line-height: 1.55;
+}
+
+.tx-breakdown-layout {
+    gap: 1.15rem;
+}
+
+.tx-breakdown-chart-card {
+    min-height: 392px;
+}
+
+.tx-breakdown-sidecard {
+    min-height: 0;
+    height: auto;
+    align-self: start;
+    gap: .75rem;
+    padding: .85rem;
+}
+
+.tx-breakdown-summary {
+    margin-bottom: 0;
+}
+
+.tx-legend-shell {
+    flex: 0 0 320px;
+    height: 320px;
+    min-height: 320px;
+    max-height: 320px;
+}
+
+.tx-breakdown-legend {
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+}
+
+.tx-breakdown-legend .legend-row {
+    transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+}
+
+.tx-breakdown-legend .legend-row:hover {
+    transform: none;
+    border-color: var(--legend-row-color, #d9e5f6);
+    background: #fff;
+    box-shadow: none;
+}
+
+.tx-breakdown-legend .legend-row.is-active {
+    border-color: var(--legend-row-color, #696cff);
+    box-shadow: none;
+}
+
+@media (max-width: 991.98px) {
+    .tx-breakdown-head.compact {
+        grid-template-columns: 1fr;
+    }
+
+    .tx-breakdown-text {
+        width: 100%;
+    }
+
+    .tx-breakdown-chart-card,
+    .tx-breakdown-sidecard {
+        min-height: 0;
+        height: auto;
+    }
+
+    .tx-breakdown-sidecard {
+        align-self: stretch;
+    }
+
+    .tx-legend-shell {
+        flex-basis: 278px;
+        height: 278px;
+        min-height: 278px;
+        max-height: 278px;
+    }
+}
+
+
+/* Transaction modal preview + ledger spacing refresh */
+#addTransactionModal .modal-dialog,
+#transactionDetailModal .modal-dialog {
+    max-width: 1240px;
+}
+
+#addTransactionModal .tx-detail-layout,
+#transactionDetailModal .tx-detail-layout {
+    grid-template-columns: minmax(340px, 380px) minmax(0, 1fr);
+    gap: 1.25rem;
+}
+
+#addTransactionModal .tx-detail-preview,
+#transactionDetailModal .tx-detail-preview {
+    padding: 1.1rem;
+}
+
+#addTransactionModal .tx-preview-amount,
+#transactionDetailModal .tx-preview-amount {
+    font-size: 1.4rem;
+    line-height: 1.15;
+}
+
+#addTransactionModal .tx-preview-copy h4,
+#transactionDetailModal .tx-preview-copy h4 {
+    font-size: 1.08rem;
+}
+
+#addTransactionModal .tx-preview-meta-compact div,
+#transactionDetailModal .tx-preview-meta-compact div {
+    min-height: 68px;
+    padding: .2rem 0;
+}
+
+.tx-list-card .card-body {
+    padding-top: 1rem;
+}
+
+.tx-list-toolbar {
+    gap: 1.25rem;
+    padding-bottom: .75rem;
+}
+
+.tx-list-head-actions {
+    gap: 1rem;
+}
+
+.tx-searchbox-list {
+    min-width: min(100%, 360px);
+}
+
+.tx-table-head,
+.tx-row-card {
+    grid-template-columns: minmax(280px, 2.4fr) minmax(170px, 1.25fr) 126px 126px minmax(150px, 1fr) 108px;
+    gap: .8rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+}
+
+.tx-table-head {
+    align-items: center;
+}
+
+.tx-row-card {
+    min-height: 88px;
+}
+
+.tx-main {
+    gap: 1rem;
+}
+
+.tx-main-copy p {
+    margin-top: .28rem;
+}
+
+.tx-pill {
+    padding: .58rem .9rem;
+}
+
+.tx-meta-col {
+    gap: .28rem;
+}
+
+.tx-amount {
+    justify-self: end;
+    white-space: nowrap;
+}
+
+.tx-actions {
+    justify-self: end;
+}
+
+.tx-pagination-bar {
+    padding-top: 1.15rem;
+}
+
+@media (max-width: 1199.98px) {
+    #addTransactionModal .tx-detail-layout,
+    #transactionDetailModal .tx-detail-layout {
+        grid-template-columns: minmax(300px, 340px) minmax(0, 1fr);
+    }
+
+    .tx-table-head,
+    .tx-row-card {
+        grid-template-columns: minmax(240px, 2fr) minmax(150px, 1.1fr) 116px 116px minmax(140px, .95fr) 96px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    #addTransactionModal .tx-detail-layout,
+    #transactionDetailModal .tx-detail-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Preview compact cards alignment refresh */
+#addTransactionModal .tx-preview-meta-compact,
+#transactionDetailModal .tx-preview-meta-compact {
+    align-items: stretch;
+    gap: 10px;
+}
+
+#addTransactionModal .tx-preview-meta-compact > div,
+#transactionDetailModal .tx-preview-meta-compact > div {
+    min-height: 76px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: .8rem .9rem;
+    border: 1px solid #e7ecf6;
+    border-radius: 16px;
+    background: #fff;
+    overflow: hidden;
+}
+
+#addTransactionModal .tx-preview-meta-compact > div span,
+#transactionDetailModal .tx-preview-meta-compact > div span {
+    display: block;
+    margin-bottom: .45rem;
+    font-size: .72rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: #8a94a6;
+}
+
+#addTransactionModal .tx-preview-meta-compact > div strong,
+#transactionDetailModal .tx-preview-meta-compact > div strong {
+    display: block;
+    font-size: 1.05rem;
+    line-height: 1.25;
+    color: #2f3a4c;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#addTransactionModal .tx-detail-preview,
+#transactionDetailModal .tx-detail-preview {
+    min-height: 0;
+}

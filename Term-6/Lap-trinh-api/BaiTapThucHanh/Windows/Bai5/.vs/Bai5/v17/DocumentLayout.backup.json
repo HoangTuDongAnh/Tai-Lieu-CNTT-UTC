@@ -41,8 +41,7 @@
               "ToolTip": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai5\\Bai5.rc - IDR_MENU2 - Menu",
               "RelativeToolTip": "Bai5.rc - IDR_MENU2 - Menu",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
-              "WhenOpened": "2026-01-29T13:52:22.502Z",
-              "EditorCaption": " - IDR_MENU2 - Menu"
+              "WhenOpened": "2026-01-29T13:52:22.502Z"
             },
             {
               "$type": "Document",
@@ -53,8 +52,7 @@
               "ToolTip": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai5\\Bai5.rc - IDR_MENU1 - Menu",
               "RelativeToolTip": "Bai5.rc - IDR_MENU1 - Menu",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
-              "WhenOpened": "2026-01-29T13:51:32.333Z",
-              "EditorCaption": " - IDR_MENU1 - Menu"
+              "WhenOpened": "2026-01-29T13:51:32.333Z"
             },
             {
               "$type": "Document",
@@ -64,7 +62,7 @@
               "RelativeDocumentMoniker": "Bai5.cpp",
               "ToolTip": "E:\\01_UNIVERSITY\\Term-6\\Lap-trinh-api\\BaiTapThucHanh\\Windows\\Bai5\\Bai5.cpp",
               "RelativeToolTip": "Bai5.cpp",
-              "ViewState": "AgIAAIEAAAAAAAAAAAAAAIoAAABhAAAAAAAAAA==",
+              "ViewState": "AgIAAIcAAAAAAAAAAAAAAIoAAABhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-01-29T13:47:28.028Z",
               "EditorCaption": ""

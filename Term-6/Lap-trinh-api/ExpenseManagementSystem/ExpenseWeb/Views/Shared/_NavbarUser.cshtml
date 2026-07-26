@@ -1,0 +1,112 @@
+
+@{
+    var lang = (ViewBag.Lang as string ?? "vi").ToLower();
+    string T(string vi, string en) => lang == "en" ? en : vi;
+
+    var userFullName = Context.Session.GetString("UserFullName") ?? T("Người dùng", "User");
+    var userEmail = Context.Session.GetString("UserEmail") ?? "user@example.com";
+
+    var userAvatar = Context.Session.GetString("UserAvatar");
+    if (string.IsNullOrWhiteSpace(userAvatar))
+    {
+        userAvatar = Url.Content("~/sneat/img/avatars/1.png");
+    }
+
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "Dashboard";
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "Index";
+
+    var navItems = new[]
+    {
+        new { Controller = "Dashboard", Action = "Index", LabelVi = "Tổng quan", LabelEn = "Dashboard", Icon = "bx-home-smile" },
+        new { Controller = "Category", Action = "Index", LabelVi = "Danh mục", LabelEn = "Categories", Icon = "bx-category" },
+        new { Controller = "Transaction", Action = "Index", LabelVi = "Giao dịch", LabelEn = "Transactions", Icon = "bx-transfer" },
+        new { Controller = "Profile", Action = "Support", LabelVi = "Hỗ trợ", LabelEn = "Support", Icon = "bx-help-circle" }
+    };
+    var currentPath = Context.Request.Path.Value ?? "/";
+    var query = new Dictionary<string, string?>();
+    foreach (var item in Context.Request.Query) { query[item.Key] = item.Value.ToString(); }
+
+    string BuildLangUrl(string targetLang)
+    {
+        query["lang"] = targetLang;
+        var queryString = string.Join("&", query.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value ?? "")}"));
+        return string.IsNullOrWhiteSpace(queryString) ? currentPath : $"{currentPath}?{queryString}";
+    }
+}
+
+<header class="mimo-topbar-wrap">
+    <nav class="container-xxl navbar navbar-expand-lg mimo-topbar" id="layout-navbar">
+        <a class="navbar-brand mimo-brand me-4" asp-controller="Dashboard" asp-action="Index" asp-route-lang="@lang">
+            <span class="mimo-brand-mark" aria-hidden="true">M</span>
+            <span class="mimo-brand-text">Mimo</span>
+        </a>
+
+        <button class="navbar-toggler border-0 shadow-none px-0" type="button" data-bs-toggle="collapse" data-bs-target="#mimoNavbar" aria-controls="mimoNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bx bx-menu fs-2 text-primary"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mimoNavbar">
+            <ul class="navbar-nav mx-auto mimo-nav-list">
+                @foreach (var item in navItems)
+                {
+                    var active = string.Equals(currentController, item.Controller, StringComparison.OrdinalIgnoreCase)
+                    && (item.Controller != "Profile" || string.Equals(currentAction, item.Action, StringComparison.OrdinalIgnoreCase));
+                    <li class="nav-item">
+                        <a class="nav-link mimo-nav-link @(active ? "active" : "")"
+                           asp-controller="@item.Controller"
+                           asp-action="@item.Action"
+                           asp-route-lang="@lang">
+                            <i class="bx @item.Icon"></i>
+                            <span>@T(item.LabelVi, item.LabelEn)</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+
+            <div class="mimo-topbar-actions ms-lg-3">
+                <div class="mimo-lang-switch" role="group" aria-label="Language switch">
+                    <a href="@BuildLangUrl("vi")" class="mimo-lang-option @(lang == "vi" ? "active" : "")">VI</a>
+                    <a href="@BuildLangUrl("en")" class="mimo-lang-option @(lang == "en" ? "active" : "")">EN</a>
+                </div>
+
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle hide-arrow p-0 d-flex align-items-center gap-2" href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="avatar avatar-online">
+                            <img src="@userAvatar" alt="avatar" class="w-px-40 h-px-40 rounded-circle" style="object-fit: cover;" />
+                        </div>
+                        <div class="d-none d-lg-flex flex-column text-start lh-sm">
+                            <strong class="text-heading">@userFullName</strong>
+                            <small class="text-body-secondary">@T("Tài khoản", "Account")</small>
+                        </div>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end mimo-user-dropdown">
+                        <li>
+                            <div class="dropdown-item-text">
+                                <div class="fw-semibold">@userFullName</div>
+                                <small class="text-body-secondary">@userEmail</small>
+                            </div>
+                        </li>
+                        <li><div class="dropdown-divider my-1"></div></li>
+                        <li>
+                            <a class="dropdown-item" asp-controller="Profile" asp-action="Index" asp-route-lang="@lang">
+                                <i class="bx bx-user icon-md me-3"></i>
+                                <span>@T("Hồ sơ cá nhân", "My Profile")</span>
+                            </a>
+                        </li>
+                        <li><div class="dropdown-divider my-1"></div></li>
+                        <li>
+                            <form asp-controller="Auth" asp-action="Logout" asp-route-lang="@lang" method="post" class="m-0">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="dropdown-item border-0 bg-transparent w-100 text-start">
+                                    <i class="bx bx-power-off icon-md me-3"></i>
+                                    <span>@T("Đăng xuất", "Log Out")</span>
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

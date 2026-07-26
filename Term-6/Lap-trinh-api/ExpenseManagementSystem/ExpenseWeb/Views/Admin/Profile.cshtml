@@ -1,0 +1,219 @@
+﻿@model ExpenseWeb.Models.ViewModels.Profile.ProfilePageViewModel
+@using System.Linq
+@{
+    var lang = (Context.Request.Query["lang"].FirstOrDefault() ?? ViewBag.Lang as string ?? "vi").ToLower();
+    string T(string vi, string en) => lang == "en" ? en : vi;
+
+    ViewData["Title"] = T("Hồ sơ Quản trị viên", "Admin Profile");
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var avatarUrl = string.IsNullOrWhiteSpace(Model?.Avatar)
+        ? Url.Content("~/sneat/img/avatars/default/teams_1.png")
+        : Model.Avatar;
+
+    var defaultAvatars = ViewBag.DefaultAvatars as List<string> ?? new List<string>();
+    var avatarLibrary = defaultAvatars.Take(9).ToList();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/page.profile.css" asp-append-version="true" />
+}
+
+<div class="container-xxl flex-grow-1 container-p-y profile-page-shell">
+    <section class="dashboard-hero mb-4">
+        <div class="dashboard-hero-copy hero-copy-single">
+            <span class="dashboard-hero-eyebrow">@T("Quản trị hệ thống", "System Administration")</span>
+            <h1 class="dashboard-hero-title">@T("Cập nhật hồ sơ quản trị viên và thông tin nhận diện", "Update the administrator profile and identity details")</h1>
+            <p class="dashboard-hero-text">
+                @T("Điều chỉnh thông tin cá nhân, ảnh đại diện và những dữ liệu cần thiết để tài khoản quản trị luôn sẵn sàng cho công việc vận hành.", "Adjust personal details, avatar, and key account data so the administrator profile is always ready for operations.")
+            </p>
+        </div>
+    </section>
+
+    <section class="profile-main-wrap mb-4">
+        <div class="profile-main-card">
+            <div class="profile-layout-grid">
+
+                <aside class="profile-avatar-card">
+                    <div class="profile-avatar-card__top">
+                        <span class="profile-card-chip">@T("Ảnh đại diện", "Avatar")</span>
+                        <h2 class="profile-avatar-title">@T("Cập nhật ảnh hồ sơ", "Update profile photo")</h2>
+                        <p class="profile-avatar-text">
+                            @T("Chọn ảnh từ máy hoặc dùng nhanh một ảnh mặc định để làm mới hồ sơ của bạn.", "Choose a photo from your device or use a default avatar to refresh your profile.")
+                        </p>
+                    </div>
+
+                    <div class="profile-avatar-card__center">
+                        <div class="profile-avatar-stage mimo-zoomable zoom-circle" data-src="@avatarUrl" title="@T("Click để xem ảnh phóng to", "Click to zoom in")" style="cursor: zoom-in;">
+                            <img src="@avatarUrl" alt="admin-avatar" class="profile-avatar-img" id="uploadedAvatar" />
+                        </div>
+                    </div>
+
+                    <div class="profile-avatar-actions">
+                        <input type="file" id="uploadAvatarFile" name="AvatarFile" accept="image/*" hidden />
+                        <button type="button" class="btn btn-primary w-100" onclick="document.getElementById('uploadAvatarFile').click()">
+                            <i class="bx bx-upload me-2"></i>@T("Upload ảnh", "Upload Image")
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#defaultAvatarModal">
+                            <i class="bx bx-image me-2"></i>@T("Dùng ảnh mặc định", "Use Default Avatar")
+                        </button>
+                    </div>
+                </aside>
+
+                <div class="profile-info-card">
+                    <div class="profile-info-head">
+                        <span class="profile-card-chip">@T("Thông tin liên hệ", "Contact Information")</span>
+                        <h2 class="profile-info-title">@T("Thông tin tài khoản", "Account details")</h2>
+                        <p class="profile-info-text">
+                            @T("Cập nhật họ tên, số điện thoại và ảnh đại diện của tài khoản Admin.", "Update your name, phone number, and admin avatar.")
+                        </p>
+                    </div>
+
+                    <form id="formProfileSettings" method="post" enctype="multipart/form-data" class="profile-form" onsubmit="return false">
+                        <input type="hidden" id="avatarUrl" name="Avatar" value="@Model.Avatar" />
+
+                        <div class="profile-form-grid">
+                            <div class="profile-field">
+                                <label for="lastName" class="form-label">@T("Họ và tên đệm", "Last & Middle Name")</label>
+                                <input class="form-control profile-input" type="text" name="lastName" id="lastName" value="@Model.LastName" placeholder="Nguyễn Văn" />
+                            </div>
+
+                            <div class="profile-field">
+                                <label for="firstName" class="form-label">@T("Tên", "First Name")</label>
+                                <input class="form-control profile-input" type="text" id="firstName" name="firstName" value="@Model.FirstName" autofocus placeholder="A" />
+                            </div>
+
+                            <div class="profile-field">
+                                <label for="email" class="form-label">@T("Email (Tài khoản đăng nhập)", "Email (Login Account)")</label>
+                                <input class="form-control profile-input profile-input-readonly" type="email" id="email" name="email" value="@Model.Email" readonly title="@T("Email Admin không thể thay đổi", "Admin email cannot be changed")" />
+                            </div>
+
+                            <div class="profile-field">
+                                <label class="form-label" for="phoneNumber">@T("Số điện thoại liên hệ", "Contact Phone Number")</label>
+                                <div class="input-group profile-input-group">
+                                    <span class="input-group-text">VN (+84)</span>
+                                    <input type="text" id="phoneNumber" name="phoneNumber" class="form-control profile-input" value="@Model.PhoneNumber" placeholder="09xx xxx xxx" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="profile-actions d-flex justify-content-center gap-3 mt-3">
+                            <button type="button" class="btn btn-outline-secondary" id="btnResetProfile">@T("Khôi phục", "Reset")</button>
+                            <button type="submit" class="btn btn-primary" id="btnSaveProfile">
+                                <i class="bx bx-save me-1"></i>@T("Lưu thay đổi", "Save Changes")
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="danger-card">
+        <div class="danger-header">
+            <div class="danger-title">
+                <div class="danger-icon"><i class="bx bx-error-circle"></i></div>
+                <div>
+                    <h3>@T("Khu vực nguy hiểm", "Danger Zone")</h3>
+                    <p class="mb-0">@T("Hành động này không thể hoàn tác. Dữ liệu của bạn sẽ bị xóa vĩnh viễn.", "This action cannot be undone. Your data will be permanently deleted.")</p>
+                </div>
+            </div>
+        </div>
+        <div class="danger-body">
+            <div>
+                <h6 class="mb-1 fw-bold">@T("Xóa tài khoản", "Delete Account")</h6>
+                <p class="mb-0 text-muted">
+                    @T("Sau khi tài khoản của bạn bị xóa, tất cả dữ liệu hệ thống, quyền quản trị và thiết lập sẽ không thể khôi phục.", "Once your account is deleted, all system data, administrative privileges, and settings cannot be recovered.")
+                </p>
+            </div>
+            <button type="button" class="btn btn-danger text-nowrap" id="btnDeleteAccount">
+                <i class="bx bx-trash me-2"></i>@T("Xóa tài khoản", "Delete Account")
+            </button>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade category-modal mimo-popup-shell avatar-picker-modal" id="defaultAvatarModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content mimo-popup-content">
+            <button type="button" class="mimo-popup-close" data-bs-dismiss="modal" aria-label="Close"><i class="bx bx-x"></i></button>
+            <div class="modal-header mimo-popup-header border-bottom-0">
+                <div class="mimo-popup-hero mimo-popup-hero--simple w-100">
+                    <div class="mimo-popup-header-copy">
+                        <h4 class="mimo-popup-title mb-1">@T("Chọn ảnh đại diện mặc định", "Choose default avatar")</h4>
+                        <p class="mimo-popup-subtitle mb-0">@T("Thư viện hiển thị theo dạng 3x3 để đồng bộ với các popup khác trong hệ thống.", "The library is displayed in a 3x3 layout to stay consistent with the other popups in the system.")</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body mimo-popup-body avatar-picker-body">
+                @if (avatarLibrary.Any())
+                {
+                    <div class="avatar-picker-grid">
+                        @for (var i = 0; i < avatarLibrary.Count; i++)
+                        {
+                            var defaultUrl = avatarLibrary[i];
+                            <div class="avatar-picker-card">
+                                <img src="@defaultUrl" class="default-avatar-option avatar-picker-item" data-url="@defaultUrl" alt="avatar-@(i + 1)" />
+                                <div class="avatar-picker-label">@T("Mẫu", "Avatar") @(i + 1)</div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-muted py-4">@T("Chưa có ảnh mặc định trong hệ thống.", "No default avatars available.")</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/pages/profile-page.js" asp-append-version="true"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const uploadedAvatar = document.getElementById('uploadedAvatar');
+            const uploadAvatarFile = document.getElementById('uploadAvatarFile');
+            const hiddenAvatarInput = document.getElementById('avatarUrl');
+            const pickerCards = document.querySelectorAll('.avatar-picker-card');
+
+            const zoomableStage = document.querySelector('.profile-avatar-stage.mimo-zoomable');
+
+            uploadAvatarFile.addEventListener('change', function (e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        uploadedAvatar.src = event.target.result;
+
+                        if(zoomableStage) zoomableStage.setAttribute('data-src', event.target.result);
+
+                        hiddenAvatarInput.value = '';
+                        pickerCards.forEach(card => card.classList.remove('active'));
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+
+            const defaultOptions = document.querySelectorAll('.default-avatar-option');
+            defaultOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    const selectedUrl = this.getAttribute('data-url');
+
+                    uploadedAvatar.src = selectedUrl;
+
+                    if(zoomableStage) zoomableStage.setAttribute('data-src', selectedUrl);
+
+                    hiddenAvatarInput.value = selectedUrl;
+                    uploadAvatarFile.value = '';
+
+                    pickerCards.forEach(card => card.classList.remove('active'));
+                    this.closest('.avatar-picker-card')?.classList.add('active');
+
+                    const modalEl = document.getElementById('defaultAvatarModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    modal.hide();
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,196 @@
+﻿@model ExpenseWeb.Models.ViewModels.Auth.VerifyOtpViewModel
+
+@{
+    var lang = (Context.Request.Query["lang"].FirstOrDefault() ?? "vi").ToLower();
+    if (lang != "en") lang = "vi";
+    string T(string vi, string en) => lang == "en" ? en : vi;
+
+    ViewBag.Title = T("Xác thực OTP", "Verify OTP");
+    ViewBag.AuthPageClass = "auth-page--single";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+
+    string SwitchLangUrl(string targetLang)
+    {
+        return Url.Action("VerifyOtp", "Auth", new { email = Model.Email, lang = targetLang }) ?? "#";
+    }
+}
+
+<div class="auth-page">
+    <div class="auth-toast-stack" id="authToastStack"></div>
+
+    <div class="auth-forgot-shell">
+        <div class="auth-single-mobile-topbar">
+            <a href="@Url.Action("Login", "Auth", new { lang = lang })" class="auth-single-mobile-brand">
+                <span class="auth-brand-mark auth-brand-mark-letter">M</span>
+                <span>Mimo</span>
+            </a>
+
+            <div class="auth-language">
+                <a href="@SwitchLangUrl("vi")" class="@(lang == "vi" ? "active" : "")">VI</a>
+                <a href="@SwitchLangUrl("en")" class="@(lang == "en" ? "active" : "")">EN</a>
+            </div>
+        </div>
+
+        <div class="auth-single-mobile-hero">
+            <h3>@T("Xác thực OTP", "Verify OTP")</h3>
+            <p>@T("Nhập mã OTP đã gửi đến email của bạn để hoàn tất đăng ký.", "Enter the OTP sent to your email to complete registration.")</p>
+        </div>
+
+        <section class="auth-forgot-hero">
+            <div class="auth-hero-art">
+                <span class="auth-shape shape-1"></span>
+                <span class="auth-shape shape-2"></span>
+                <span class="auth-shape shape-3"></span>
+                <span class="auth-line line-1"></span>
+                <span class="auth-line line-2"></span>
+                <span class="auth-line line-3"></span>
+            </div>
+
+            <div class="auth-language">
+                <a href="@SwitchLangUrl("vi")" class="@(lang == "vi" ? "active" : "")">VI</a>
+                <a href="@SwitchLangUrl("en")" class="@(lang == "en" ? "active" : "")">EN</a>
+            </div>
+
+            <a href="@Url.Action("Login", "Auth", new { lang = lang })" class="auth-brand">
+                <span class="auth-brand-mark auth-brand-mark-letter">M</span>
+                <span>Mimo</span>
+            </a>
+
+            <div class="auth-overlay-content">
+                <div class="auth-badge">
+                    <i class="bx bx-shield-quarter"></i>
+                    <span>@T("Xác thực tài khoản", "Account verification")</span>
+                </div>
+
+                <h1>@T("Nhập mã OTP", "Enter OTP code")</h1>
+                <p>
+                    @T(
+                    "Chúng tôi đã gửi mã xác thực đến email của bạn. Nhập mã OTP để hoàn tất đăng ký và bảo vệ tài khoản.",
+                                        "We sent a verification code to your email. Enter the OTP to complete registration and secure your account."
+                                        )
+                </p>
+
+                <div class="auth-hero-points">
+                    <div class="auth-hero-point">
+                        <i class="bx bx-envelope"></i>
+                        <span>@T("Kiểm tra email đã đăng ký", "Check your registered email")</span>
+                    </div>
+                    <div class="auth-hero-point">
+                        <i class="bx bx-timer"></i>
+                        <span>@T("Mã chỉ có hiệu lực trong thời gian ngắn", "Code is valid for a limited time")</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="auth-forgot-panel">
+            <div class="auth-form-wrap">
+                <div class="auth-eyebrow">@T("Xác thực OTP", "OTP verification")</div>
+                <h2>@T("Hoàn tất đăng ký", "Complete registration")</h2>
+                <p class="auth-form-subtitle">
+                    @T("Nhập mã OTP đã được gửi đến email của bạn.", "Enter the OTP sent to your email.")
+                </p>
+
+                <form asp-action="VerifyOtp"
+                      asp-controller="Auth"
+                      method="post"
+                      class="auth-card-form"
+                      data-auth-form="verify-otp">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="lang" value="@lang" />
+                    <input asp-for="Email" type="hidden" />
+
+                    <div class="auth-field">
+                        <label>@T("Email", "Email")</label>
+                        <div class="auth-input-wrap">
+                            <i class="bx bx-envelope auth-input-icon"></i>
+                            <input value="@Model.Email"
+                                   class="auth-input"
+                                   readonly />
+                        </div>
+                    </div>
+
+                    <div class="auth-field">
+                        <label asp-for="Otp">@T("Mã OTP", "OTP Code")</label>
+                        <div class="auth-input-wrap">
+                            <i class="bx bx-key auth-input-icon"></i>
+                            <input asp-for="Otp"
+                                   class="auth-input"
+                                   placeholder="@T("Nhập mã OTP", "Enter OTP code")"
+                                   autofocus />
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                            class="auth-submit"
+                            data-submit-text
+                            data-loading-text="@T("Đang xác thực...", "Verifying...")">
+                        @T("Xác thực", "Verify")
+                    </button>
+                </form>
+
+                <form asp-action="ResendOtp"
+                      asp-controller="Auth"
+                      method="post"
+                      class="mt-3">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="email" value="@Model.Email" />
+                    <input type="hidden" name="lang" value="@lang" />
+
+                    <button type="submit" class="auth-ghost-btn w-100 text-dark border-success">
+                        @T("Gửi lại mã OTP", "Resend OTP")
+                    </button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <a href="@Url.Action("Login", "Auth", new { lang = lang })" class="auth-back-link">
+                        <i class="bx bx-chevron-left"></i>
+                        <span>@T("Quay lại đăng nhập", "Back to login")</span>
+                    </a>
+                </div>
+
+                <div class="auth-footer-note">
+                    <strong>Mimo</strong> —
+                    @T("Bảo vệ tài khoản của bạn bằng xác thực email", "Protect your account with email verification")
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            @if (!ViewData.ModelState.IsValid)
+            {
+                var errors = ViewData.ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct()
+                    .ToList();
+
+                if (errors.Count > 0)
+                {
+                    <text>
+                    window.AuthToast?.error(window.AuthPage?.t("verifyError"), @Html.Raw(System.Text.Json.JsonSerializer.Serialize(errors)));
+                    </text>
+                }
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <text>
+                window.AuthToast?.error(window.AuthPage?.t("error"), ["@TempData["ErrorMessage"]"]);
+                </text>
+            }
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <text>
+                window.AuthToast?.success(window.AuthPage?.t("success"), ["@TempData["SuccessMessage"]"]);
+                </text>
+            }
+        })();
+    </script>
+}

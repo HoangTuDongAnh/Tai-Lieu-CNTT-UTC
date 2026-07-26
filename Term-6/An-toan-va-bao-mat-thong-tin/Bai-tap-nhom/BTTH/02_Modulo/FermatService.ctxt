@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=FermatService
+comment1.params=
+comment1.target=FermatService()
+comment2.params=a\ m\ n
+comment2.target=long\ tinh(long,\ long,\ long)
+numComments=3

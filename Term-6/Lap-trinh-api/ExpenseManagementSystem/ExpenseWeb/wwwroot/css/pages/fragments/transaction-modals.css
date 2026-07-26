@@ -1,0 +1,47 @@
+﻿.tx-category-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 5px 0;
+}
+
+.tx-category-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    background: #ffffff;
+    border: 1px solid #eceef1;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: fit-content;
+}
+
+.tx-category-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+#addTransferPreviewPanel {
+    background: linear-gradient(145deg, #f8faff 0%, #ffffff 100%);
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid #e0e6ed;
+    box-shadow: 0 10px 25px rgba(105, 108, 255, 0.05);
+}
+
+#transferPreviewAmount {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #364152;
+    margin-top: 20px;
+    letter-spacing: -0.5px;
+    text-align: center;
+}

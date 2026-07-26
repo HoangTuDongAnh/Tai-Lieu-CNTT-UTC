@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=CanNguyenThuyService
+comment1.params=
+comment1.target=CanNguyenThuyService()
+comment2.params=a\ n
+comment2.target=boolean\ laCanNguyenThuy(long,\ long)
+comment3.params=n
+comment3.target=long[]\ layCacUocNguyenToKhacNhau(long)
+numComments=4

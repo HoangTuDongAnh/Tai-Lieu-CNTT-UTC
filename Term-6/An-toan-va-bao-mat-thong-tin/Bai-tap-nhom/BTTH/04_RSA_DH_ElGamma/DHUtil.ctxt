@@ -1,0 +1,5 @@
+#BlueJ class context
+comment0.target=DHUtil
+comment1.params=base\ exponent\ mod
+comment1.target=long\ powerMod(long,\ long,\ long)
+numComments=2

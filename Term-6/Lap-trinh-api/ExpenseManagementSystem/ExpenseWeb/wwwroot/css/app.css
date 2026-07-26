@@ -1,0 +1,35 @@
+@import url('./site.css');
+
+:root {
+  --app-radius-sm: 12px;
+  --app-radius-md: 18px;
+  --app-radius-lg: 24px;
+  --app-surface: rgba(255,255,255,0.92);
+  --app-border: rgba(72,161,17,0.14);
+  --app-shadow: 0 12px 30px rgba(67, 89, 113, 0.08);
+}
+
+.app-page-shell {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.app-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.app-page-title {
+  margin: 0;
+  font-size: clamp(1.65rem, 2vw, 2.2rem);
+  letter-spacing: -0.03em;
+}
+
+.app-page-subtitle {
+  margin: 0.45rem 0 0;
+  color: #6b7280;
+  max-width: 60rem;
+}

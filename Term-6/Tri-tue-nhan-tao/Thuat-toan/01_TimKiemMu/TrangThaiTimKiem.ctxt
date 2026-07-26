@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=TrangThaiTimKiem
+comment1.params=
+comment1.target=java.lang.String\ maTrangThai()
+comment2.params=
+comment2.target=boolean\ laTrangThaiDich()
+comment3.params=
+comment3.target=java.util.List\ sinhTrangThaiKe()
+comment4.params=
+comment4.target=TrangThaiTimKiem\ getCha()
+comment5.params=cha
+comment5.target=void\ setCha(TrangThaiTimKiem)
+comment6.params=
+comment6.target=int\ getDoSau()
+comment7.params=doSau
+comment7.target=void\ setDoSau(int)
+numComments=8

@@ -1,0 +1,244 @@
+﻿@{
+    ViewData["Title"] = "Quản lý khách hàng";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h3 class="text-center mb-4">QUẢN LÝ KHÁCH HÀNG</h3>
+
+            <div class="mb-3">
+                <label class="form-label">Mã Khách</label>
+                <input type="text" id="maKhach" class="form-control" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tên Khách</label>
+                <input type="text" id="tenKhach" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Địa Chỉ</label>
+                <input type="text" id="diaChi" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Số điện thoại</label>
+                <input type="text" id="dienThoai" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-primary" id="btnThem">Thêm khách hàng</button>
+                <button type="button" class="btn btn-primary" id="btnSua">Sửa khách hàng</button>
+                <button type="button" class="btn btn-secondary" id="btnLamMoi">Làm mới</button>
+            </div>
+
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Mã Khách</th>
+                        <th>Tên Khách</th>
+                        <th>Địa chỉ</th>
+                        <th>Số điện thoại</th>
+                        <th>Xóa</th>
+                        <th>Sửa</th>
+                    </tr>
+                </thead>
+                <tbody id="dsKhachHang">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container {
+        max-width: 900px;
+    }
+
+    table td, table th {
+        vertical-align: middle;
+    }
+</style>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        const apiUrl = "http://127.0.0.1:5000/kh";
+
+        $(document).ready(function () {
+            hienThiDanhSachKhachHang();
+
+            $("#btnThem").click(function () {
+                themKhachHang();
+            });
+
+            $("#btnSua").click(function () {
+                capNhatKhachHang();
+            });
+
+            $("#btnLamMoi").click(function () {
+                lamMoiForm();
+            });
+        });
+
+        function hienThiDanhSachKhachHang() {
+            $.ajax({
+                url: apiUrl + "/getall",
+                type: "GET",
+                success: function (data) {
+                    let html = "";
+
+                    $.each(data, function (index, item) {
+                        html += `
+                            <tr>
+                                <td>${item.maKhach ?? ""}</td>
+                                <td>${item.tenKhach ?? ""}</td>
+                                <td>${item.diaChi ?? ""}</td>
+                                <td>${item.dienThoai ?? ""}</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="xoaKhachHang('${item.maKhach}')">
+                                        Xóa
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-warning btn-sm" onclick="layKhachHangTheoMa('${item.maKhach}')">
+                                        Sửa
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    $("#dsKhachHang").html(html);
+                },
+                error: function (xhr) {
+                    alert("Lỗi tải danh sách khách hàng!");
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+        function themKhachHang() {
+            let tenKhach = $("#tenKhach").val().trim();
+            let diaChi = $("#diaChi").val().trim();
+            let dienThoai = $("#dienThoai").val().trim();
+
+            if (tenKhach === "" || diaChi === "" || dienThoai === "") {
+                alert("Vui lòng nhập đầy đủ thông tin.");
+                return;
+            }
+
+            let khachHang = {
+                tenKhach: tenKhach,
+                diaChi: diaChi,
+                dienThoai: dienThoai
+            };
+
+            $.ajax({
+                url: apiUrl + "/add",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(khachHang),
+                success: function (res) {
+                    alert(res.mess);
+                    lamMoiForm();
+                    hienThiDanhSachKhachHang();
+                },
+                error: function (xhr) {
+                    alert("Thêm khách hàng thất bại!");
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+        function layKhachHangTheoMa(maKhach) {
+            $.ajax({
+                url: apiUrl + "/getbyid/" + maKhach,
+                type: "GET",
+                success: function (data) {
+                    if (data.length > 0) {
+                        $("#maKhach").val(data[0].maKhach);
+                        $("#tenKhach").val(data[0].tenKhach);
+                        $("#diaChi").val(data[0].diaChi);
+                        $("#dienThoai").val(data[0].dienThoai);
+                    } else {
+                        alert("Không tìm thấy khách hàng.");
+                    }
+                },
+                error: function (xhr) {
+                    alert("Lỗi lấy thông tin khách hàng!");
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+        function capNhatKhachHang() {
+            let maKhach = $("#maKhach").val().trim();
+            let tenKhach = $("#tenKhach").val().trim();
+            let diaChi = $("#diaChi").val().trim();
+            let dienThoai = $("#dienThoai").val().trim();
+
+            if (maKhach === "") {
+                alert("Vui lòng chọn khách hàng cần sửa.");
+                return;
+            }
+
+            if (tenKhach === "" || diaChi === "" || dienThoai === "") {
+                alert("Vui lòng nhập đầy đủ thông tin.");
+                return;
+            }
+
+            let khachHang = {
+                tenKhach: tenKhach,
+                diaChi: diaChi,
+                dienThoai: dienThoai
+            };
+
+            $.ajax({
+                url: apiUrl + "/update/" + maKhach,
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(khachHang),
+                success: function (res) {
+                    alert(res.mess);
+                    lamMoiForm();
+                    hienThiDanhSachKhachHang();
+                },
+                error: function (xhr) {
+                    alert("Cập nhật khách hàng thất bại!");
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+
+        function xoaKhachHang(maKhach) {
+            if (!confirm("Bạn có chắc muốn xóa khách hàng này không?")) {
+                return;
+            }
+
+            $.ajax({
+                url: apiUrl + "/delete/" + maKhach,
+                type: "DELETE",
+                success: function (res) {
+                    alert(res.mess);
+                    lamMoiForm();
+                    hienThiDanhSachKhachHang();
+                },
+                error: function (xhr) {
+                    alert("Xóa khách hàng thất bại!");
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+        function lamMoiForm() {
+            $("#maKhach").val("");
+            $("#tenKhach").val("");
+            $("#diaChi").val("");
+            $("#dienThoai").val("");
+        }
+    </script>
+}

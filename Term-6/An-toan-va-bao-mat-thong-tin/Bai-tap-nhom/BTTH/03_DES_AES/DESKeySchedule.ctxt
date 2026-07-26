@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=DESKeySchedule
+comment1.params=
+comment1.target=DESKeySchedule()
+comment2.params=key64
+comment2.target=java.lang.String\ pc1(java.lang.String)
+comment3.params=key56
+comment3.target=java.lang.String[]\ splitKey56(java.lang.String)
+comment4.params=input28\ s
+comment4.target=java.lang.String\ shiftLeft28(java.lang.String,\ int)
+comment5.params=c28\ d28
+comment5.target=java.lang.String\ pc2(java.lang.String,\ java.lang.String)
+comment6.params=key64
+comment6.target=java.lang.String[]\ generateSubKeys(java.lang.String)
+numComments=7

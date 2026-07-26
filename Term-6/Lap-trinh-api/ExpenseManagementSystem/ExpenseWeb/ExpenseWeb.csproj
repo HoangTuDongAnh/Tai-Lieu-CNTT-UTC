@@ -1,0 +1,89 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\sneat\css\demo.css" />
+    <None Include="wwwroot\sneat\img\backgrounds\1.jpg" />
+    <None Include="wwwroot\sneat\img\elements\1.png" />
+    <None Include="wwwroot\sneat\img\elements\10.png" />
+    <None Include="wwwroot\sneat\img\elements\11.png" />
+    <None Include="wwwroot\sneat\img\elements\12.png" />
+    <None Include="wwwroot\sneat\img\elements\13.png" />
+    <None Include="wwwroot\sneat\img\elements\14.png" />
+    <None Include="wwwroot\sneat\img\elements\15.png" />
+    <None Include="wwwroot\sneat\img\elements\16.png" />
+    <None Include="wwwroot\sneat\img\elements\17.png" />
+    <None Include="wwwroot\sneat\img\elements\18.png" />
+    <None Include="wwwroot\sneat\img\elements\19.png" />
+    <None Include="wwwroot\sneat\img\elements\2.png" />
+    <None Include="wwwroot\sneat\img\elements\3.png" />
+    <None Include="wwwroot\sneat\img\elements\4.png" />
+    <None Include="wwwroot\sneat\img\elements\5.png" />
+    <None Include="wwwroot\sneat\img\elements\6.png" />
+    <None Include="wwwroot\sneat\img\elements\7.png" />
+    <None Include="wwwroot\sneat\img\elements\8.png" />
+    <None Include="wwwroot\sneat\img\elements\9.png" />
+    <None Include="wwwroot\sneat\img\favicon\favicon.ico" />
+    <None Include="wwwroot\sneat\img\icons\brands\asana.png" />
+    <None Include="wwwroot\sneat\img\icons\brands\behance.png" />
+    <None Include="wwwroot\sneat\img\icons\brands\dribbble.png" />
+    <None Include="wwwroot\sneat\img\icons\brands\facebook.png" />
+    <None Include="wwwroot\sneat\img\icons\brands\github.png" />
+    <None Include="wwwroot\sneat\img\icons\brands\google.png" />
+    <None Include="wwwroot\sneat\img\icons\brands\instagram.png" />
+    <None Include="wwwroot\sneat\img\icons\brands\mailchimp.png" />
+    <None Include="wwwroot\sneat\img\icons\brands\slack.png" />
+    <None Include="wwwroot\sneat\img\icons\brands\twitter.png" />
+    <None Include="wwwroot\sneat\img\icons\unicons\cc-primary.png" />
+    <None Include="wwwroot\sneat\img\icons\unicons\cc-warning.png" />
+    <None Include="wwwroot\sneat\img\icons\unicons\chart-success.png" />
+    <None Include="wwwroot\sneat\img\icons\unicons\chart.png" />
+    <None Include="wwwroot\sneat\img\icons\unicons\paypal.png" />
+    <None Include="wwwroot\sneat\img\icons\unicons\wallet-info.png" />
+    <None Include="wwwroot\sneat\img\icons\unicons\wallet.png" />
+    <None Include="wwwroot\sneat\img\illustrations\girl-doing-yoga-light.png" />
+    <None Include="wwwroot\sneat\img\illustrations\man-with-laptop.png" />
+    <None Include="wwwroot\sneat\img\illustrations\page-misc-error-light.png" />
+    <None Include="wwwroot\sneat\img\layouts\layout-container-light.png" />
+    <None Include="wwwroot\sneat\img\layouts\layout-fluid-light.png" />
+    <None Include="wwwroot\sneat\img\layouts\layout-without-menu-light.png" />
+    <None Include="wwwroot\sneat\img\layouts\layout-without-navbar-light.png" />
+    <None Include="wwwroot\sneat\js\config.js" />
+    <None Include="wwwroot\sneat\js\dashboards-analytics.js" />
+    <None Include="wwwroot\sneat\js\extended-ui-perfect-scrollbar.js" />
+    <None Include="wwwroot\sneat\js\form-basic-inputs.js" />
+    <None Include="wwwroot\sneat\js\main.js" />
+    <None Include="wwwroot\sneat\js\pages-account-settings-account.js" />
+    <None Include="wwwroot\sneat\js\ui-modals.js" />
+    <None Include="wwwroot\sneat\js\ui-popover.js" />
+    <None Include="wwwroot\sneat\js\ui-toasts.js" />
+    <None Include="wwwroot\sneat\vendor\css\core.css" />
+    <None Include="wwwroot\sneat\vendor\css\pages\page-auth.css" />
+    <None Include="wwwroot\sneat\vendor\css\pages\page-icons.css" />
+    <None Include="wwwroot\sneat\vendor\css\pages\page-misc.css" />
+    <None Include="wwwroot\sneat\vendor\fonts\iconify-icons.css" />
+    <None Include="wwwroot\sneat\vendor\js\bootstrap.js" />
+    <None Include="wwwroot\sneat\vendor\js\helpers.js" />
+    <None Include="wwwroot\sneat\vendor\js\menu.js" />
+    <None Include="wwwroot\sneat\vendor\libs\apex-charts\apex-charts.css" />
+    <None Include="wwwroot\sneat\vendor\libs\apex-charts\apexcharts.js" />
+    <None Include="wwwroot\sneat\vendor\libs\highlight\highlight-github.css" />
+    <None Include="wwwroot\sneat\vendor\libs\highlight\highlight.css" />
+    <None Include="wwwroot\sneat\vendor\libs\highlight\highlight.js" />
+    <None Include="wwwroot\sneat\vendor\libs\jquery\jquery.js" />
+    <None Include="wwwroot\sneat\vendor\libs\masonry\masonry.js" />
+    <None Include="wwwroot\sneat\vendor\libs\perfect-scrollbar\perfect-scrollbar.css" />
+    <None Include="wwwroot\sneat\vendor\libs\perfect-scrollbar\perfect-scrollbar.js" />
+    <None Include="wwwroot\sneat\vendor\libs\popper\popper.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.23" />
+  </ItemGroup>
+
+</Project>

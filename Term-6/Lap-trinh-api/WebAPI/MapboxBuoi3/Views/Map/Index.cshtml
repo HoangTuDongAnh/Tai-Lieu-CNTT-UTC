@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Mapbox Demo";
+    var mapboxToken = ViewBag.MapboxToken as string;
+}
+
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.20.0/mapbox-gl.css" rel="stylesheet" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.20.0/mapbox-gl.js"></script>
+
+<style>
+    .map-page {
+        padding: 20px 0;
+    }
+
+    #map {
+        width: 100%;
+        height: 600px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+
+    .title-box {
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="container map-page">
+    <div class="title-box">
+        <h2>BẢN ĐỒ MAPBOX</h2>
+        <p>Click lên bản đồ để xem tọa độ tại vị trí click.</p>
+    </div>
+
+    <div id="map"></div>
+</div>
+
+<script>
+    mapboxgl.accessToken = '@mapboxToken';
+
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [105.8342, 21.0278], // Hà Nội
+        zoom: 12
+    });
+
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+    map.on('click', function (e) {
+        const lng = e.lngLat.lng.toFixed(6);
+        const lat = e.lngLat.lat.toFixed(6);
+
+        new mapboxgl.Popup()
+            .setLngLat([e.lngLat.lng, e.lngLat.lat])
+            .setHTML(`
+                <b>Tọa độ vừa chọn</b><br />
+                Kinh độ: ${lng}<br />
+                Vĩ độ: ${lat}
+            `)
+            .addTo(map);
+
+        new mapboxgl.Marker()
+            .setLngLat([e.lngLat.lng, e.lngLat.lat])
+            .addTo(map);
+    });
+</script>

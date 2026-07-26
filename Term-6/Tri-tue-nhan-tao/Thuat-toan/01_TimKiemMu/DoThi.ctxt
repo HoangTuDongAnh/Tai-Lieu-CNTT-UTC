@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=DoThi
+comment1.params=tenTrangThaiDich
+comment1.target=DoThi(java.lang.String)
+comment2.params=ten
+comment2.target=TrangThaiDoThi\ taoTrangThai(java.lang.String)
+comment3.params=u\ v
+comment3.target=void\ themCung(TrangThaiDoThi,\ TrangThaiDoThi)
+comment4.params=
+comment4.target=void\ reset()
+numComments=5

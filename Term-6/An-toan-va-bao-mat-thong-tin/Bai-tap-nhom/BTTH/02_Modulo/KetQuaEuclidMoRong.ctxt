@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=KetQuaEuclidMoRong
+comment1.params=gcd\ x\ y
+comment1.target=KetQuaEuclidMoRong(long,\ long,\ long)
+comment2.params=
+comment2.target=long\ getGcd()
+comment3.params=
+comment3.target=long\ getX()
+comment4.params=
+comment4.target=long\ getY()
+comment5.params=
+comment5.target=java.lang.String\ toString()
+numComments=6

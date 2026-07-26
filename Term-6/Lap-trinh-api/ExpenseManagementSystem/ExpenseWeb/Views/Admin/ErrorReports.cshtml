@@ -1,0 +1,271 @@
+@model ExpenseWeb.Models.ViewModels.Admin.AdminErrorReportsPageViewModel
+@{
+    var lang = (Context.Request.Query["lang"].FirstOrDefault() ?? ViewBag.Lang as string ?? "vi").ToLower();
+    string T(string vi, string en) => lang == "en" ? en : vi;
+    ViewData["Title"] = T("Quản lý yêu cầu hỗ trợ", "User Support Requests");
+
+    var totalCount = Model.Items.Count;
+    var pendingCount = Model.Items.Count(x => string.Equals(x.Status, "pending", StringComparison.OrdinalIgnoreCase));
+    var processingCount = Model.Items.Count(x => string.Equals(x.Status, "viewed", StringComparison.OrdinalIgnoreCase));
+    var repliedCount = Model.Items.Count(x => string.Equals(x.Status, "replied", StringComparison.OrdinalIgnoreCase));
+    var urgentCount = Model.Items.Count(x => string.Equals(x.Priority, "urgent", StringComparison.OrdinalIgnoreCase));
+
+    var jsShowing = System.Text.Json.JsonSerializer.Serialize(T("Hiển thị", "Showing"));
+    var jsOfTotal = System.Text.Json.JsonSerializer.Serialize(T("trên tổng số", "of total"));
+    var jsRequests = System.Text.Json.JsonSerializer.Serialize(T("yêu cầu", "requests"));
+    var jsPreviousPage = System.Text.Json.JsonSerializer.Serialize(T("Trang trước", "Previous page"));
+    var jsNextPage = System.Text.Json.JsonSerializer.Serialize(T("Trang sau", "Next page"));
+    var jsFilterError = System.Text.Json.JsonSerializer.Serialize(T("Không thể tải danh sách. Vui lòng thử lại.", "Unable to load the list. Please try again."));
+    var jsLoadingText = System.Text.Json.JsonSerializer.Serialize(T("Đang tải chi tiết...", "Loading details..."));
+    var jsLoadErrorText = System.Text.Json.JsonSerializer.Serialize(T("Không thể tải dữ liệu. Vui lòng thử lại.", "Failed to load data. Please try again."));
+    var jsDownloadText = System.Text.Json.JsonSerializer.Serialize(T("Tải xuống", "Download"));
+    var jsOpenFileText = System.Text.Json.JsonSerializer.Serialize(T("Mở tệp", "Open file"));
+    var jsDocumentNote = System.Text.Json.JsonSerializer.Serialize(T("Tệp DOC/DOCX chưa được trình duyệt render ổn định như PDF. Bạn có thể tải xuống hoặc mở trực tiếp từ đây.", "DOC/DOCX files are not rendered as reliably as PDF in browsers. You can download or open them directly."));
+}
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/page.admin-reports.css" asp-append-version="true" />
+}
+
+<div class="container-xxl flex-grow-1 container-p-y admin-support-page">
+    <section class="dashboard-hero mb-4">
+        <div class="dashboard-hero-copy hero-copy-single">
+            <span class="dashboard-hero-eyebrow">@T("Quản trị hệ thống", "System Administration")</span>
+            <h1 class="dashboard-hero-title">@T("Tiếp nhận yêu cầu hỗ trợ và báo lỗi từ người dùng", "Review support requests and issue reports from users")</h1>
+            <p class="dashboard-hero-text">
+                @T("Tập trung xử lý yêu cầu từ người dùng theo cùng ngôn ngữ thiết kế với trang gửi hỗ trợ phía User: dễ quét nhanh, rõ trạng thái và mở chi tiết ngay trong popup.", "Handle user requests with the same design language as the user support page: easy to scan, clear status, and quick popup review.")
+            </p>
+        </div>
+    </section>
+
+    @if (TempData["AdminSupportSuccess"] is string success && !string.IsNullOrWhiteSpace(success))
+    {
+        <div class="alert alert-success alert-dismissible mb-4" role="alert">
+            <i class="bx bx-check-circle me-1"></i> @success
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["AdminSupportError"] is string error && !string.IsNullOrWhiteSpace(error))
+    {
+        <div class="alert alert-warning alert-dismissible mb-4" role="alert">
+            <i class="bx bx-error-circle me-1"></i> @error
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <section class="admin-support-overview mb-4" id="adminSupportOverview">
+        <article class="admin-support-stat-card">
+            <span class="admin-support-stat-icon total"><i class="bx bx-collection"></i></span>
+            <div>
+                <span class="admin-support-stat-label">@T("Tổng yêu cầu", "Total requests")</span>
+                <strong class="admin-support-stat-value">@totalCount</strong>
+                <small>@T("Kết quả trong bộ lọc hiện tại", "Items in current filter")</small>
+            </div>
+        </article>
+        <article class="admin-support-stat-card">
+            <span class="admin-support-stat-icon pending"><i class="bx bx-time-five"></i></span>
+            <div>
+                <span class="admin-support-stat-label">@T("Chờ tiếp nhận", "Pending")</span>
+                <strong class="admin-support-stat-value">@pendingCount</strong>
+                <small>@T("Cần admin mở và xác nhận", "Need admin review")</small>
+            </div>
+        </article>
+        <article class="admin-support-stat-card">
+            <span class="admin-support-stat-icon viewed"><i class="bx bx-loader-circle"></i></span>
+            <div>
+                <span class="admin-support-stat-label">@T("Đang xử lý", "Processing")</span>
+                <strong class="admin-support-stat-value">@processingCount</strong>
+                <small>@T("Đã tiếp nhận nhưng chưa chốt", "Accepted but not finalized")</small>
+            </div>
+        </article>
+        <article class="admin-support-stat-card">
+            <span class="admin-support-stat-icon urgent"><i class="bx bx-error-circle"></i></span>
+            <div>
+                <span class="admin-support-stat-label">@T("Khẩn cấp", "Urgent")</span>
+                <strong class="admin-support-stat-value">@urgentCount</strong>
+                <small>@T("Ưu tiên xử lý trước", "Prioritize first")</small>
+            </div>
+        </article>
+    </section>
+
+    <div class="card support-shell-card admin-support-filter-card mb-4" id="adminSupportFilterCard">
+        <div class="card-header support-card-header border-0">
+            <div class="support-card-title">
+                <div class="support-card-icon"><i class="bx bx-filter-alt"></i></div>
+                <div>
+                    <h3 class="support-card-heading">@T("Bộ lọc hỗ trợ", "Support filters")</h3>
+                    <p class="support-card-desc">@T("Lọc nhanh theo trạng thái, loại hỗ trợ, ưu tiên và từ khóa người dùng.", "Filter by status, support type, priority, and user keyword.")</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-body support-form-panel">
+            <form method="get" asp-action="ErrorReports" asp-controller="Admin" class="admin-support-filter-grid" id="adminSupportFilterForm" data-admin-filter-form>
+                <div class="admin-filter-field admin-filter-field--keyword">
+                    <label class="form-label">@T("Từ khóa", "Keyword")</label>
+                    <input type="text" name="keyword" value="@Model.Keyword" class="form-control admin-filter-input" placeholder="@T("Tìm theo tiêu đề hoặc email user...", "Search by title or user email...")" />
+                </div>
+                <div class="admin-filter-field">
+                    <label class="form-label">@T("Trạng thái", "Status")</label>
+                    <select name="status" class="form-select admin-filter-select">
+                        <option value="">@T("Tất cả", "All")</option>
+                        <option value="pending" selected="@(Model.CurrentStatus == "pending")">@T("Chờ tiếp nhận", "Pending")</option>
+                        <option value="viewed" selected="@(Model.CurrentStatus == "viewed")">@T("Đang xử lý", "Processing")</option>
+                        <option value="replied" selected="@(Model.CurrentStatus == "replied")">@T("Đã phản hồi", "Replied")</option>
+                        <option value="closed" selected="@(Model.CurrentStatus == "closed")">@T("Đã đóng", "Closed")</option>
+                    </select>
+                </div>
+                <div class="admin-filter-field">
+                    <label class="form-label">@T("Loại hỗ trợ", "Support Type")</label>
+                    <select name="supportType" class="form-select admin-filter-select">
+                        <option value="">@T("Tất cả", "All")</option>
+                        <option value="bug" selected="@(Model.CurrentSupportType == "bug")">@T("Báo lỗi hệ thống", "System Bug")</option>
+                        <option value="transaction" selected="@(Model.CurrentSupportType == "transaction")">@T("Hỗ trợ giao dịch", "Transaction Support")</option>
+                        <option value="account" selected="@(Model.CurrentSupportType == "account")">@T("Hỗ trợ tài khoản", "Account Support")</option>
+                        <option value="feature" selected="@(Model.CurrentSupportType == "feature")">@T("Góp ý tính năng", "Feature Request")</option>
+                    </select>
+                </div>
+                <div class="admin-filter-field">
+                    <label class="form-label">@T("Ưu tiên", "Priority")</label>
+                    <select name="priority" class="form-select admin-filter-select">
+                        <option value="">@T("Tất cả", "All")</option>
+                        <option value="low" selected="@(Model.CurrentPriority == "low")">@T("Thấp", "Low")</option>
+                        <option value="medium" selected="@(Model.CurrentPriority == "medium")">@T("Trung bình", "Medium")</option>
+                        <option value="high" selected="@(Model.CurrentPriority == "high")">@T("Cao", "High")</option>
+                        <option value="urgent" selected="@(Model.CurrentPriority == "urgent")">@T("Khẩn cấp", "Urgent")</option>
+                    </select>
+                </div>
+                <div class="admin-filter-actions">
+                    <button type="submit" class="btn btn-primary admin-filter-submit"><i class="bx bx-search-alt me-1"></i>@T("Tìm kiếm", "Search")</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card support-shell-card admin-support-list-card" id="adminSupportListCard">
+        <div class="card-header support-card-header border-0 pb-0">
+            <div class="support-card-title">
+                <div class="support-card-icon"><i class="bx bx-list-ul"></i></div>
+                <div>
+                    <h3 class="support-card-heading">@T("Danh sách yêu cầu hỗ trợ", "Support request list")</h3>
+                    <p class="support-card-desc">@T("Mở từng yêu cầu để xem nội dung, tệp đính kèm và phản hồi quản trị ngay trong popup.", "Open each request to review content, attachments, and admin response in a popup.")</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-body admin-support-history-body">
+            <div class="admin-support-ledger-wrap">
+                <div class="admin-support-table-head">
+                    <div>@T("Yêu cầu", "Request")</div>
+                    <div>@T("Người dùng", "User")</div>
+                    <div>@T("Loại hỗ trợ", "Support type")</div>
+                    <div>@T("Ưu tiên", "Priority")</div>
+                    <div>@T("Thời gian gửi", "Sent at")</div>
+                    <div class="text-end">@T("Thao tác", "Action")</div>
+                </div>
+
+                <div class="admin-support-list-shell" id="adminSupportListShell">
+                    @if (Model.Items.Count == 0)
+                    {
+                        <div class="admin-support-empty-state">
+                            <i class="bx bx-folder-open"></i>
+                            <strong>@T("Chưa có dữ liệu hỗ trợ phù hợp.", "No matching support requests found.")</strong>
+                            <p class="mb-0 mt-2">@T("Hãy thử đổi bộ lọc hoặc từ khóa để mở rộng kết quả.", "Try changing the filters or keyword to widen the results.")</p>
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model.Items)
+                        {
+                            <article class="admin-support-row-item" data-id="@item.SupportRequestId">
+                                <div class="admin-support-main">
+                                    <div class="admin-support-main-icon"><i class="bx bx-message-rounded-detail"></i></div>
+                                    <div class="admin-support-main-copy">
+                                        <div class="admin-support-row-top">
+                                            <span class="admin-support-request-code">@item.SupportRequestId</span>
+                                            <span class="admin-support-status-note @item.Status">@item.StatusLabel</span>
+                                        </div>
+                                        <h6>@item.Subject</h6>
+                                        <p class="admin-support-row-desc">@T("Mở popup để xem nội dung chi tiết, tệp đính kèm và phản hồi quản trị.", "Open the popup to review details, attachments, and admin response.")</p>
+                                    </div>
+                                </div>
+                                <div class="admin-support-user-copy">
+                                    <strong>@item.UserFullName</strong>
+                                    <span>@item.UserEmail</span>
+                                </div>
+                                <div><span class="badge @item.SupportTypeBadgeClass admin-support-badge">@item.SupportTypeLabel</span></div>
+                                <div><span class="badge @item.PriorityBadgeClass admin-support-badge">@item.PriorityLabel</span></div>
+                                <div class="admin-support-time">@item.CreatedAt.ToString("HH:mm")<span>@item.CreatedAt.ToString("dd-MM-yyyy")</span></div>
+                                <div class="admin-support-actions text-end">
+                                    <button type="button" class="btn btn-sm btn-outline-success admin-support-open" data-id="@item.SupportRequestId">
+                                        <i class="bx bx-show me-1"></i>@T("Xem", "View")
+                                    </button>
+                                </div>
+                            </article>
+                        }
+                    }
+                </div>
+
+                <div class="admin-pagination-bar @(Model.Items.Count == 0 ? "d-none" : string.Empty)" id="adminSupportPaginationBar">
+                    <span class="admin-pagination-info" id="adminSupportPaginationInfo"></span>
+                    <div class="admin-pagination" id="adminSupportPagination"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade tx-modal tx-detail-modal mimo-popup-shell admin-support-modal" id="requestDetailModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered tx-modal-dialog tx-detail-modal-dialog support-modal-dialog" role="document">
+        <div class="modal-content mimo-popup-content support-popup-content">
+            <button type="button" class="mimo-popup-close" data-bs-dismiss="modal" aria-label="Close"><i class="bx bx-x"></i></button>
+            <div class="modal-header mimo-popup-header border-bottom-0">
+                <div class="mimo-popup-hero mimo-popup-hero--simple w-100">
+                    <div class="mimo-popup-header-copy">
+                        <h4 class="mimo-popup-title mb-1"><i class="bx bx-headphone me-2 text-primary"></i>@T("Chi tiết xử lý hỗ trợ", "Support request details")</h4>
+                        <p class="mimo-popup-subtitle mb-0">@T("Theo dõi nội dung yêu cầu, mở tệp đính kèm toàn màn hình và gửi phản hồi trực tiếp.", "Review request content, open attachments full screen, and reply directly.")</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body mimo-popup-body" id="modalDetailContent"></div>
+        </div>
+    </div>
+</div>
+
+<div class="support-lightbox" id="adminSupportLightbox" aria-hidden="true">
+    <div class="support-lightbox-backdrop" data-lightbox-close></div>
+    <div class="support-lightbox-dialog">
+        <button type="button" class="support-lightbox-close" data-lightbox-close aria-label="Close"><i class="bx bx-x"></i></button>
+        <div class="support-lightbox-topbar">
+            <button type="button" class="support-lightbox-nav" id="adminSupportLightboxPrev" aria-label="Previous file"><i class="bx bx-chevron-left"></i></button>
+            <div class="support-lightbox-file" id="adminSupportLightboxFileName"></div>
+            <div class="support-lightbox-actions">
+                <a href="#" class="support-lightbox-download" id="adminSupportLightboxDownload" download><i class="bx bx-download"></i><span>@T("Tải xuống", "Download")</span></a>
+                <button type="button" class="support-lightbox-nav" id="adminSupportLightboxNext" aria-label="Next file"><i class="bx bx-chevron-right"></i></button>
+            </div>
+        </div>
+        <div class="support-lightbox-content" id="adminSupportLightboxContent"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/pages/admin-support-page.js" asp-append-version="true"></script>
+    <script>
+        window.adminSupportConfig = {
+            detailUrl: '@Url.Action("GetSupportDetail", "Admin")',
+            pageUrl: '@Url.Action("ErrorReports", "Admin")',
+            loadingText: @Html.Raw(jsLoadingText),
+            loadErrorText: @Html.Raw(jsLoadErrorText),
+            filterErrorText: @Html.Raw(jsFilterError),
+            downloadText: @Html.Raw(jsDownloadText),
+            openFileText: @Html.Raw(jsOpenFileText),
+            documentNote: @Html.Raw(jsDocumentNote),
+            listPageSize: 6,
+            showingText: @Html.Raw(jsShowing),
+            ofTotalText: @Html.Raw(jsOfTotal),
+            requestsText: @Html.Raw(jsRequests),
+            previousPageText: @Html.Raw(jsPreviousPage),
+            nextPageText: @Html.Raw(jsNextPage)
+        };
+    </script>
+}

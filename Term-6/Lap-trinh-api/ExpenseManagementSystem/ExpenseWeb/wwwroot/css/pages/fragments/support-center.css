@@ -1,0 +1,79 @@
+.support-form-card .card-header,
+.support-history-card .card-header,
+.support-filter-card .card-header,
+.support-admin-list-card .card-header,
+.support-admin-detail-card .card-header {
+    padding-top: 1.25rem;
+}
+
+.support-attachment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.support-attachment-card {
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.support-attachment-preview {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+    background: #f5f5f9;
+}
+
+.support-attachment-video {
+    width: 100%;
+    height: 140px;
+    background: #000;
+}
+
+.support-attachment-body {
+    padding: 10px 12px;
+}
+
+.support-attachment-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #566a7f;
+    word-break: break-word;
+}
+
+.support-attachment-meta,
+.support-file-hint {
+    font-size: 12px;
+    color: #8592a3;
+}
+
+.support-history-card .report-expense-item,
+.support-request-item {
+    transition: background 0.2s ease;
+}
+
+.support-history-card .report-expense-item:hover,
+.support-request-item:hover {
+    background: rgba(72, 161, 17, 0.04);
+}
+
+.support-history-card .bg-lighter {
+    background: rgba(72,161,17,0.04) !important;
+}
+
+.support-request-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+}
+
+.support-request-code {
+    color: #7b8794;
+    font-size: 0.92rem;
+}
+
+.hover-opacity:hover { opacity: 0.8; transition: opacity 0.2s ease-in-out; }

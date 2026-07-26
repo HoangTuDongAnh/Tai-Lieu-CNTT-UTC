@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=ElGamalCipher
+comment1.params=c1\ c2
+comment1.target=ElGamalCipher(long,\ long)
+comment2.params=
+comment2.target=long\ getC1()
+comment3.params=
+comment3.target=long\ getC2()
+comment4.params=
+comment4.target=java.lang.String\ toString()
+numComments=5

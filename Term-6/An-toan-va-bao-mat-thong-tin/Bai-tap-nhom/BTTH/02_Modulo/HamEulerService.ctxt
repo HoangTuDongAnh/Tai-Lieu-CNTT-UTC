@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=HamEulerService
+comment1.params=
+comment1.target=HamEulerService()
+comment2.params=n
+comment2.target=long\ tinhTheoDinhNghia(long)
+comment3.params=n
+comment3.target=long\ tinhTheoPhanTich(long)
+numComments=4

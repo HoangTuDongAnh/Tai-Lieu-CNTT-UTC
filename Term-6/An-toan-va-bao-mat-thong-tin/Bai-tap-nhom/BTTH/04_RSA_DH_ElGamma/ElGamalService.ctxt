@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=ElGamalService
+comment1.params=
+comment1.target=ElGamalService()
+comment2.params=q\ a\ xA
+comment2.target=long\ tinhKhoaCongKhai(long,\ long,\ long)
+comment3.params=q\ a\ yA\ k\ M
+comment3.target=ElGamalCipher\ maHoa(long,\ long,\ long,\ long,\ long)
+comment4.params=q\ xA\ cipher
+comment4.target=long\ giaiMa(long,\ long,\ ElGamalCipher)
+comment5.params=q\ yA\ k
+comment5.target=long\ tinhKMaHoa(long,\ long,\ long)
+comment6.params=q\ c1\ xA
+comment6.target=long\ tinhKGiaiMa(long,\ long,\ long)
+numComments=7

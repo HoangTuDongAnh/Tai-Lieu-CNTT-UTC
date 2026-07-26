@@ -1,0 +1,86 @@
+:root {
+  --app-toast-success-bg: #eaf8e1;
+  --app-toast-success-border: rgba(72,161,17,0.26);
+  --app-toast-success-text: #245913;
+  --app-toast-error-bg: #fdf0f0;
+  --app-toast-error-border: rgba(220,38,38,0.22);
+  --app-toast-error-text: #991b1b;
+  --app-toast-warning-bg: #fff8e8;
+  --app-toast-warning-border: rgba(245, 158, 11, 0.25);
+  --app-toast-warning-text: #92400e;
+  --app-toast-info-bg: #eef6ff;
+  --app-toast-info-border: rgba(59, 130, 246, 0.22);
+  --app-toast-info-text: #1d4ed8;
+}
+
+.app-toast-stack {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2000;
+  width: min(380px, calc(100vw - 2rem));
+  display: grid;
+  gap: 0.75rem;
+  pointer-events: none;
+}
+
+.app-toast {
+  pointer-events: auto;
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid var(--app-border, rgba(72,161,17,0.14));
+  box-shadow: 0 18px 40px rgba(67, 89, 113, 0.14);
+  overflow: hidden;
+  animation: appToastIn .18s ease-out;
+}
+
+.app-toast--success { background: var(--app-toast-success-bg); border-color: var(--app-toast-success-border); color: var(--app-toast-success-text); }
+.app-toast--error { background: var(--app-toast-error-bg); border-color: var(--app-toast-error-border); color: var(--app-toast-error-text); }
+.app-toast--warning { background: var(--app-toast-warning-bg); border-color: var(--app-toast-warning-border); color: var(--app-toast-warning-text); }
+.app-toast--info { background: var(--app-toast-info-bg); border-color: var(--app-toast-info-border); color: var(--app-toast-info-text); }
+
+.app-toast__inner { padding: 0.95rem 1rem; display: grid; gap: 0.45rem; }
+.app-toast__head { display: flex; align-items: start; justify-content: space-between; gap: 0.75rem; }
+.app-toast__title { font-weight: 700; line-height: 1.2; }
+.app-toast__close { border: 0; background: transparent; font-size: 1.1rem; line-height: 1; color: inherit; opacity: 0.72; }
+.app-toast__close:hover { opacity: 1; }
+.app-toast__body { display: grid; gap: 0.3rem; font-size: 0.94rem; }
+
+.cmp-modal .modal-content,
+.cmp-offcanvas.offcanvas {
+  border-radius: 24px;
+  border: 1px solid rgba(72,161,17,0.12);
+  box-shadow: 0 18px 40px rgba(67, 89, 113, 0.14);
+}
+
+.cmp-modal-header,
+.cmp-offcanvas-header,
+.cmp-modal-footer,
+.cmp-offcanvas-footer {
+  padding: 1rem 1.25rem;
+}
+
+.cmp-modal-body,
+.cmp-offcanvas-body {
+  padding: 0 1.25rem 1.25rem;
+}
+
+.cmp-modal-header,
+.cmp-offcanvas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cmp-modal-title,
+.cmp-offcanvas-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+@keyframes appToastIn {
+  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}

@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=DSAService
+comment1.params=
+comment1.target=DSAService()
+comment2.params=p\ q\ h
+comment2.target=long\ tinhG(long,\ long,\ long)
+comment3.params=p\ g\ xA
+comment3.target=long\ tinhKhoaCongKhai(long,\ long,\ long)
+comment4.params=hM\ p\ q\ g\ xA\ k
+comment4.target=DSASignature\ kySo(long,\ long,\ long,\ long,\ long,\ long)
+comment5.params=s\ q
+comment5.target=long\ tinhW(long,\ long)
+comment6.params=hM\ w\ q
+comment6.target=long\ tinhU1(long,\ long,\ long)
+comment7.params=r\ w\ q
+comment7.target=long\ tinhU2(long,\ long,\ long)
+comment8.params=p\ q\ g\ yA\ u1\ u2
+comment8.target=long\ tinhV(long,\ long,\ long,\ long,\ long,\ long)
+comment9.params=hM\ p\ q\ g\ yA\ signature
+comment9.target=boolean\ xacMinh(long,\ long,\ long,\ long,\ long,\ DSASignature)
+numComments=10

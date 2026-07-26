@@ -1,0 +1,5 @@
+#BlueJ class context
+comment0.target=ModMath
+comment1.params=a\ n
+comment1.target=long\ mod(long,\ long)
+numComments=2
